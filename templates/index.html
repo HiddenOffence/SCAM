@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Study Style Quiz</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<h1>Find Your Best Study Method</h1>
+
+<div class="progress-container">
+<div id="progress-bar"></div>
+</div>
+
+<form method="POST" action="/submit" id="quizForm">
+
+{% for question in questions %}
+<div class="question">
+
+<p><b>Question {{ loop.index }}</b>: {{ question.text }}</p>
+
+{% for key, value in question.options.items() %}
+<label>
+<input type="radio" name="q{{ loop.index }}" value="{{ key }}" onchange="updateProgress()">
+{{ value }}
+</label>
+<br>
+{% endfor %}
+
+</div>
+{% endfor %}
+
+<button type="submit">See Results</button>
+
+</form>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
