@@ -1,42 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Your Results</title>
-<link rel="stylesheet" href="/static/style.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
+{% extends "base.html" %}
 
-<body>
+{% block content %}
 
-<h1>Your Study Style Results</h1>
-<h2>Recommended Study Method</h2>
-<p>{{ recommendation }}</p>
+<h1>Your Results</h1>
 
-<canvas id="resultsChart" width="400" height="200"></canvas>
+<p>
 
-<script>
+Results will appear here.
 
-let visual = {{ visual }};
-let auditory = {{ auditory }};
-let practical = {{ practical }};
-let reading = {{ reading }};
+</p>
 
-const ctx = document.getElementById('resultsChart');
-
-new Chart(ctx, {
-type: 'bar',
-data: {
-labels: ['Visual','Auditory','Practical','Reading/Writing'],
-datasets: [{
-label: 'Your Study Style Score',
-data: [visual, auditory, practical, reading]
-}]
-}
-});
-
-</script>
-
-<a href="/">Take Quiz Again</a>
-
-</body>
-</html>
+{% endblock %}
