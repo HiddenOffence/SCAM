@@ -1,13 +1,25 @@
-function updateProgress(){
+const options =
+document.querySelectorAll(
+".answer-option"
+);
 
-let totalQuestions = 30;
+options.forEach(option => {
 
-let answered = document.querySelectorAll("input[type=radio]:checked").length;
+    option.addEventListener(
+    "click",
 
-let percentage = (answered/totalQuestions)*100;
+    () => {
 
-let bar = document.getElementById("progress-bar");
+        options.forEach(o =>
+            o.classList.remove(
+                "selected"
+            )
+        );
 
-bar.style.width = percentage + "%";
+        option.classList.add(
+            "selected"
+        );
+    });
 
-}
+});
+
