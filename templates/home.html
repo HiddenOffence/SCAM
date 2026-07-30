@@ -1,41 +1,131 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Study Style Quiz</title>
-<link rel="stylesheet" href="/static/style.css"> 
-</head>
+{% extends "base.html" %}
 
-<body>
+{% block content %}
 
-<h1>Find Your Best Study Method</h1>
+<section class="hero">
 
-<div class="progress-container">
-<div id="progress-bar"></div>
-</div>
+    <div class="hero-text">
 
-<form method="POST" action="/submit" id="quizForm">
+        <h1>Stop Cramming<br>Start Learning</h1>
 
-{% for question in questions %}
-<div class="question">
+        <p>
+            Discover personalised, evidence-based study
+            strategies that match how you learn best.
+        </p>
 
-<p><b>Question {{ loop.index }}</b>: {{ question.text }}</p>
+        <div class="hero-buttons">
 
-{% for key, value in question.options.items() %}
-<label>
-<input type="radio" name="q{{ loop.index }}" value="{{ key }}" onchange="updateProgress()">
-{{ value }}
-</label>
-<br>
-{% endfor %}
+            <a href="/quiz" class="btn-primary">
+                Start the Quiz
+            </a>
 
-</div>
-{% endfor %}
+            <a href="/about" class="btn-secondary">
+                Learn More
+            </a>
 
-<button type="submit">See Results</button>
+        </div>
 
-</form>
+        <div class="research-badge">
 
-<script src="{{ url_for('static', filename='script.js') }}"></script>
+            ✔ Based on educational research
 
-</body>
-</html>
+        </div>
+
+    </div>
+
+</section>
+
+<section>
+    <section class="features">
+
+    <div class="feature-card">
+
+        <div class="icon">🧠</div>
+
+        <h2>Personalised Quiz</h2>
+
+        <p>
+            Complete a 30-question assessment to discover
+            study techniques that suit your learning preferences.
+        </p>
+
+    </div>
+
+    <div class="feature-card">
+
+        <div class="icon">📚</div>
+
+        <h2>Evidence-Based</h2>
+
+        <p>
+            Recommendations are based on educational research,
+            cognitive science and proven learning strategies.
+        </p>
+
+    </div>
+
+    <div class="feature-card">
+
+        <div class="icon">📈</div>
+
+        <h2>Study Smarter</h2>
+
+        <p>
+            Learn practical ways to improve revision,
+            reduce stress and build better study habits.
+        </p>
+
+    </div>
+
+</section>
+
+<section class="steps">
+
+    <h2>How It Works</h2>
+
+    <div class="step-container">
+
+        <div class="step">
+
+            <div class="number">1</div>
+
+            <h3>Take the Quiz</h3>
+
+            <p>
+                Answer 30 questions about
+                your study habits.
+            </p>
+
+        </div>
+
+        <div class="step">
+
+            <div class="number">2</div>
+
+            <h3>Receive Results</h3>
+
+            <p>
+                Discover your personalised
+                study profile.
+            </p>
+
+        </div>
+
+        <div class="step">
+
+            <div class="number">3</div>
+
+            <h3>Study Smarter</h3>
+
+            <p>
+                Use evidence-based
+                techniques to improve.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
