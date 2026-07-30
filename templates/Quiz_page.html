@@ -1,0 +1,861 @@
+import { useState } from 'react';
+import { ChevronRight, ChevronLeft, Check } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+
+interface Question {
+  id: number;
+  category: string;
+  question: string;
+  options: string[];
+  weights: {
+    visual: number;
+    auditory: number;
+    kinesthetic: number;
+    reading: number;
+  }[];
+}
+
+const questions: Question[] = [
+  // Learning Style (5 questions)
+  {
+    id: 1,
+    category: 'Learning Style',
+    question: 'When learning something new, I prefer to:',
+    options: [
+      'Watch videos or diagrams',
+      'Listen to explanations or discussions',
+      'Do hands-on activities or experiments',
+      'Read articles or textbooks'
+    ],
+    weights: [
+      { visual: 3, auditory: 0, kinesthetic: 0, reading: 0 },
+      { visual: 0, auditory: 3, kinesthetic: 0, reading: 0 },
+      { visual: 0, auditory: 0, kinesthetic: 3, reading: 0 },
+      { visual: 0, auditory: 0, kinesthetic: 0, reading: 3 }
+    ]
+  },
+  {
+    id: 2,
+    category: 'Learning Style',
+    question: 'I remember information best when:',
+    options: [
+      'I see it in charts, images, or color-coded notes',
+      'I hear it repeated or explained out loud',
+      'I practice it physically or write it down',
+      'I read and reread the material'
+    ],
+    weights: [
+      { visual: 3, auditory: 0, kinesthetic: 0, reading: 0 },
+      { visual: 0, auditory: 3, kinesthetic: 0, reading: 0 },
+      { visual: 0, auditory: 0, kinesthetic: 3, reading: 0 },
+      { visual: 0, auditory: 0, kinesthetic: 0, reading: 3 }
+    ]
+  },
+  {
+    id: 3,
+    category: 'Learning Style',
+    question: 'When following instructions, I prefer:',
+    options: [
+      'Step-by-step pictures or flowcharts',
+      'Someone explaining them to me',
+      'Trying it out myself as I go',
+      'Written instructions I can reference'
+    ],
+    weights: [
+      { visual: 3, auditory: 0, kinesthetic: 0, reading: 0 },
+      { visual: 0, auditory: 3, kinesthetic: 0, reading: 0 },
+      { visual: 0, auditory: 0, kinesthetic: 3, reading: 0 },
+      { visual: 0, auditory: 0, kinesthetic: 0, reading: 3 }
+    ]
+  },
+  {
+    id: 4,
+    category: 'Learning Style',
+    question: 'In a classroom, I learn best when:',
+    options: [
+      'The teacher uses slides, videos, or whiteboard drawings',
+      'The teacher lectures and encourages discussion',
+      'There are labs, projects, or interactive activities',
+      'I can take detailed notes and read the textbook'
+    ],
+    weights: [
+      { visual: 3, auditory: 0, kinesthetic: 0, reading: 0 },
+      { visual: 0, auditory: 3, kinesthetic: 0, reading: 0 },
+      { visual: 0, auditory: 0, kinesthetic: 3, reading: 0 },
+      { visual: 0, auditory: 0, kinesthetic: 0, reading: 3 }
+    ]
+  },
+  {
+    id: 5,
+    category: 'Learning Style',
+    question: 'When I need to recall information, I:',
+    options: [
+      'Visualize where I saw it or picture it in my mind',
+      'Hear the explanation in my head',
+      'Remember the feeling or action associated with it',
+      'Recall the exact words or text'
+    ],
+    weights: [
+      { visual: 3, auditory: 0, kinesthetic: 0, reading: 0 },
+      { visual: 0, auditory: 3, kinesthetic: 0, reading: 0 },
+      { visual: 0, auditory: 0, kinesthetic: 3, reading: 0 },
+      { visual: 0, auditory: 0, kinesthetic: 0, reading: 3 }
+    ]
+  },
+
+  // Memory Habits (5 questions)
+  {
+    id: 6,
+    category: 'Memory Habits',
+    question: 'I remember things better when I:',
+    options: [
+      'Review them multiple times over several days',
+      'Study them intensively in one session',
+      'Connect them to things I already know',
+      'Test myself repeatedly'
+    ],
+    weights: [
+      { visual: 1, auditory: 1, kinesthetic: 1, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 1, reading: 1 },
+      { visual: 2, auditory: 1, kinesthetic: 1, reading: 2 },
+      { visual: 1, auditory: 1, kinesthetic: 2, reading: 2 }
+    ]
+  },
+  {
+    id: 7,
+    category: 'Memory Habits',
+    question: 'After learning something, I tend to:',
+    options: [
+      'Forget it quickly if I don\'t review',
+      'Remember it well for a few days',
+      'Remember it if it was interesting or meaningful',
+      'Remember it if I practiced or used it'
+    ],
+    weights: [
+      { visual: 1, auditory: 1, kinesthetic: 0, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 1, reading: 1 },
+      { visual: 2, auditory: 2, kinesthetic: 1, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 3, reading: 2 }
+    ]
+  },
+  {
+    id: 8,
+    category: 'Memory Habits',
+    question: 'To memorize a list or sequence, I:',
+    options: [
+      'Create acronyms or visual patterns',
+      'Say it out loud repeatedly',
+      'Write it down multiple times',
+      'Make flashcards and quiz myself'
+    ],
+    weights: [
+      { visual: 3, auditory: 1, kinesthetic: 0, reading: 1 },
+      { visual: 0, auditory: 3, kinesthetic: 1, reading: 0 },
+      { visual: 1, auditory: 0, kinesthetic: 3, reading: 1 },
+      { visual: 2, auditory: 1, kinesthetic: 2, reading: 2 }
+    ]
+  },
+  {
+    id: 9,
+    category: 'Memory Habits',
+    question: 'I find it easiest to remember:',
+    options: [
+      'Faces and visual details',
+      'Names and conversations',
+      'Experiences and how things felt',
+      'Facts and written information'
+    ],
+    weights: [
+      { visual: 3, auditory: 0, kinesthetic: 0, reading: 0 },
+      { visual: 0, auditory: 3, kinesthetic: 0, reading: 0 },
+      { visual: 0, auditory: 0, kinesthetic: 3, reading: 0 },
+      { visual: 0, auditory: 0, kinesthetic: 0, reading: 3 }
+    ]
+  },
+  {
+    id: 10,
+    category: 'Memory Habits',
+    question: 'When studying for a test, I:',
+    options: [
+      'Review my notes and highlight key points',
+      'Explain the material to someone else',
+      'Create practice problems and work through them',
+      'Reread the textbook and summarize chapters'
+    ],
+    weights: [
+      { visual: 3, auditory: 0, kinesthetic: 1, reading: 1 },
+      { visual: 1, auditory: 3, kinesthetic: 1, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 3, reading: 1 },
+      { visual: 1, auditory: 0, kinesthetic: 1, reading: 3 }
+    ]
+  },
+
+  // Study Preferences (5 questions)
+  {
+    id: 11,
+    category: 'Study Preferences',
+    question: 'My ideal study environment is:',
+    options: [
+      'Quiet and organized with minimal distractions',
+      'With background music or ambient noise',
+      'Flexible - I can study anywhere',
+      'Structured with a dedicated study space'
+    ],
+    weights: [
+      { visual: 2, auditory: 0, kinesthetic: 1, reading: 2 },
+      { visual: 1, auditory: 3, kinesthetic: 1, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 3, reading: 1 },
+      { visual: 2, auditory: 1, kinesthetic: 1, reading: 2 }
+    ]
+  },
+  {
+    id: 12,
+    category: 'Study Preferences',
+    question: 'I prefer to study:',
+    options: [
+      'Alone with my own materials',
+      'In study groups or with a partner',
+      'With a tutor or mentor guiding me',
+      'Using online resources and videos'
+    ],
+    weights: [
+      { visual: 1, auditory: 0, kinesthetic: 1, reading: 2 },
+      { visual: 1, auditory: 3, kinesthetic: 2, reading: 1 },
+      { visual: 1, auditory: 2, kinesthetic: 2, reading: 1 },
+      { visual: 3, auditory: 2, kinesthetic: 1, reading: 2 }
+    ]
+  },
+  {
+    id: 13,
+    category: 'Study Preferences',
+    question: 'When organizing my study materials, I:',
+    options: [
+      'Use color-coding and visual organization',
+      'Keep everything digital and searchable',
+      'Use physical notebooks and binders',
+      'Create outlines and structured lists'
+    ],
+    weights: [
+      { visual: 3, auditory: 0, kinesthetic: 1, reading: 1 },
+      { visual: 2, auditory: 1, kinesthetic: 1, reading: 2 },
+      { visual: 1, auditory: 1, kinesthetic: 3, reading: 2 },
+      { visual: 1, auditory: 0, kinesthetic: 1, reading: 3 }
+    ]
+  },
+  {
+    id: 14,
+    category: 'Study Preferences',
+    question: 'I learn new software or tools best by:',
+    options: [
+      'Watching tutorial videos',
+      'Having someone show me in person',
+      'Clicking around and exploring on my own',
+      'Reading the documentation or manual'
+    ],
+    weights: [
+      { visual: 3, auditory: 1, kinesthetic: 0, reading: 0 },
+      { visual: 1, auditory: 3, kinesthetic: 1, reading: 0 },
+      { visual: 1, auditory: 0, kinesthetic: 3, reading: 0 },
+      { visual: 0, auditory: 0, kinesthetic: 1, reading: 3 }
+    ]
+  },
+  {
+    id: 15,
+    category: 'Study Preferences',
+    question: 'When taking notes, I prefer to:',
+    options: [
+      'Draw diagrams, mind maps, and sketches',
+      'Record lectures or discussion audio',
+      'Write everything down by hand',
+      'Type detailed notes on my computer'
+    ],
+    weights: [
+      { visual: 3, auditory: 0, kinesthetic: 1, reading: 0 },
+      { visual: 0, auditory: 3, kinesthetic: 0, reading: 1 },
+      { visual: 1, auditory: 0, kinesthetic: 3, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 1, reading: 3 }
+    ]
+  },
+
+  // Motivation (5 questions)
+  {
+    id: 16,
+    category: 'Motivation',
+    question: 'I feel most motivated when:',
+    options: [
+      'I can see my progress visually',
+      'I receive encouragement from others',
+      'I achieve small wins and milestones',
+      'I understand why the material matters'
+    ],
+    weights: [
+      { visual: 3, auditory: 1, kinesthetic: 1, reading: 1 },
+      { visual: 1, auditory: 3, kinesthetic: 1, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 3, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 1, reading: 3 }
+    ]
+  },
+  {
+    id: 17,
+    category: 'Motivation',
+    question: 'When I struggle with difficult material, I:',
+    options: [
+      'Look for visual explanations or examples',
+      'Ask someone to explain it differently',
+      'Take a break and come back to it',
+      'Research and read about it from multiple sources'
+    ],
+    weights: [
+      { visual: 3, auditory: 1, kinesthetic: 0, reading: 1 },
+      { visual: 1, auditory: 3, kinesthetic: 1, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 3, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 1, reading: 3 }
+    ]
+  },
+  {
+    id: 18,
+    category: 'Motivation',
+    question: 'I stay motivated to study when:',
+    options: [
+      'The material is presented in an engaging visual way',
+      'I can discuss it with peers or study groups',
+      'I can apply it to real-world situations',
+      'I have clear goals and deadlines'
+    ],
+    weights: [
+      { visual: 3, auditory: 1, kinesthetic: 1, reading: 1 },
+      { visual: 1, auditory: 3, kinesthetic: 1, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 3, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 1, reading: 3 }
+    ]
+  },
+  {
+    id: 19,
+    category: 'Motivation',
+    question: 'My biggest study challenge is:',
+    options: [
+      'Staying focused on text-heavy materials',
+      'Learning in silence without discussion',
+      'Sitting still for long periods',
+      'Getting started without clear structure'
+    ],
+    weights: [
+      { visual: 2, auditory: 1, kinesthetic: 2, reading: 0 },
+      { visual: 1, auditory: 3, kinesthetic: 1, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 3, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 1, reading: 2 }
+    ]
+  },
+  {
+    id: 20,
+    category: 'Motivation',
+    question: 'I feel accomplished when:',
+    options: [
+      'I can create visual summaries of what I learned',
+      'I can explain concepts to others',
+      'I can demonstrate or apply my knowledge',
+      'I complete all my study tasks and goals'
+    ],
+    weights: [
+      { visual: 3, auditory: 1, kinesthetic: 1, reading: 1 },
+      { visual: 1, auditory: 3, kinesthetic: 1, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 3, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 1, reading: 3 }
+    ]
+  },
+
+  // Study Behavior (5 questions)
+  {
+    id: 21,
+    category: 'Study Behavior',
+    question: 'I typically study:',
+    options: [
+      'In short, frequent sessions throughout the day',
+      'In longer sessions with breaks in between',
+      'Right before I need to use the information',
+      'On a consistent schedule at the same time'
+    ],
+    weights: [
+      { visual: 2, auditory: 2, kinesthetic: 2, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 2, reading: 2 },
+      { visual: 1, auditory: 1, kinesthetic: 3, reading: 1 },
+      { visual: 2, auditory: 1, kinesthetic: 1, reading: 2 }
+    ]
+  },
+  {
+    id: 22,
+    category: 'Study Behavior',
+    question: 'When preparing for exams, I:',
+    options: [
+      'Create visual study guides and review sheets',
+      'Form study groups and quiz each other',
+      'Do practice problems and hands-on exercises',
+      'Make comprehensive outlines and summaries'
+    ],
+    weights: [
+      { visual: 3, auditory: 1, kinesthetic: 1, reading: 1 },
+      { visual: 1, auditory: 3, kinesthetic: 2, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 3, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 1, reading: 3 }
+    ]
+  },
+  {
+    id: 23,
+    category: 'Study Behavior',
+    question: 'I procrastinate least when:',
+    options: [
+      'I have a visual tracker or checklist',
+      'I have an accountability partner',
+      'The task is hands-on or interactive',
+      'I have a detailed plan with clear steps'
+    ],
+    weights: [
+      { visual: 3, auditory: 1, kinesthetic: 1, reading: 1 },
+      { visual: 1, auditory: 3, kinesthetic: 1, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 3, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 1, reading: 3 }
+    ]
+  },
+  {
+    id: 24,
+    category: 'Study Behavior',
+    question: 'During study sessions, I often:',
+    options: [
+      'Doodle or highlight in different colors',
+      'Talk through problems out loud',
+      'Fidget or move around while thinking',
+      'Take extensive written notes'
+    ],
+    weights: [
+      { visual: 3, auditory: 0, kinesthetic: 1, reading: 1 },
+      { visual: 0, auditory: 3, kinesthetic: 1, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 3, reading: 0 },
+      { visual: 1, auditory: 0, kinesthetic: 1, reading: 3 }
+    ]
+  },
+  {
+    id: 25,
+    category: 'Study Behavior',
+    question: 'My study materials are usually:',
+    options: [
+      'Filled with diagrams, charts, and colored highlights',
+      'Audio recordings or podcast-style summaries',
+      'Physical flashcards and hands-on tools',
+      'Detailed written notes and documents'
+    ],
+    weights: [
+      { visual: 3, auditory: 0, kinesthetic: 1, reading: 1 },
+      { visual: 0, auditory: 3, kinesthetic: 0, reading: 1 },
+      { visual: 1, auditory: 0, kinesthetic: 3, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 1, reading: 3 }
+    ]
+  },
+
+  // Focus and Habits (5 questions)
+  {
+    id: 26,
+    category: 'Focus and Habits',
+    question: 'I maintain focus best when:',
+    options: [
+      'I have clean, organized visual space',
+      'I can listen to music or ambient sounds',
+      'I can take movement breaks regularly',
+      'I follow a structured routine'
+    ],
+    weights: [
+      { visual: 3, auditory: 0, kinesthetic: 1, reading: 2 },
+      { visual: 1, auditory: 3, kinesthetic: 1, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 3, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 1, reading: 3 }
+    ]
+  },
+  {
+    id: 27,
+    category: 'Focus and Habits',
+    question: 'When I lose focus, I get back on track by:',
+    options: [
+      'Looking at my visual goals or progress tracker',
+      'Taking a discussion break with someone',
+      'Doing a quick physical activity or stretch',
+      'Reviewing my to-do list and priorities'
+    ],
+    weights: [
+      { visual: 3, auditory: 1, kinesthetic: 1, reading: 1 },
+      { visual: 1, auditory: 3, kinesthetic: 1, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 3, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 1, reading: 3 }
+    ]
+  },
+  {
+    id: 28,
+    category: 'Focus and Habits',
+    question: 'My most productive study time is:',
+    options: [
+      'When I have good lighting and visual clarity',
+      'When I can discuss or verbalize my thoughts',
+      'When I\'m physically energized and active',
+      'Early morning or late night when it\'s quiet'
+    ],
+    weights: [
+      { visual: 3, auditory: 1, kinesthetic: 1, reading: 1 },
+      { visual: 1, auditory: 3, kinesthetic: 1, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 3, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 1, reading: 3 }
+    ]
+  },
+  {
+    id: 29,
+    category: 'Focus and Habits',
+    question: 'I combat mental fatigue by:',
+    options: [
+      'Changing to different visual content',
+      'Switching to audio content or podcasts',
+      'Taking an active break or walking',
+      'Switching subjects or study topics'
+    ],
+    weights: [
+      { visual: 3, auditory: 1, kinesthetic: 1, reading: 1 },
+      { visual: 1, auditory: 3, kinesthetic: 1, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 3, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 1, reading: 3 }
+    ]
+  },
+  {
+    id: 30,
+    category: 'Focus and Habits',
+    question: 'To build a new study habit, I need:',
+    options: [
+      'Visual reminders and progress tracking',
+      'Social accountability and encouragement',
+      'Hands-on practice and repetition',
+      'Clear written goals and reflection'
+    ],
+    weights: [
+      { visual: 3, auditory: 1, kinesthetic: 1, reading: 1 },
+      { visual: 1, auditory: 3, kinesthetic: 1, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 3, reading: 1 },
+      { visual: 1, auditory: 1, kinesthetic: 1, reading: 3 }
+    ]
+  }
+];
+
+interface StudyQuizProps {}
+
+export default function StudyQuiz({}: StudyQuizProps) {
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [answers, setAnswers] = useState<number[]>(new Array(30).fill(-1));
+  const [showResults, setShowResults] = useState(false);
+  const [direction, setDirection] = useState(0);
+
+  const handleAnswer = (optionIndex: number) => {
+    const newAnswers = [...answers];
+    newAnswers[currentQuestion] = optionIndex;
+    setAnswers(newAnswers);
+  };
+
+  const handleNext = () => {
+    if (currentQuestion < questions.length - 1) {
+      setDirection(1);
+      setCurrentQuestion(currentQuestion + 1);
+    } else if (answers.every(a => a !== -1)) {
+      setShowResults(true);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentQuestion > 0) {
+      setDirection(-1);
+      setCurrentQuestion(currentQuestion - 1);
+    }
+  };
+
+  const calculateResults = () => {
+    const scores = {
+      visual: 0,
+      auditory: 0,
+      kinesthetic: 0,
+      reading: 0
+    };
+
+    answers.forEach((answerIndex, questionIndex) => {
+      if (answerIndex !== -1) {
+        const question = questions[questionIndex];
+        const weights = question.weights[answerIndex];
+        scores.visual += weights.visual;
+        scores.auditory += weights.auditory;
+        scores.kinesthetic += weights.kinesthetic;
+        scores.reading += weights.reading;
+      }
+    });
+
+    return scores;
+  };
+
+  const getStudyMethod = (scores: { visual: number; auditory: number; kinesthetic: number; reading: number }) => {
+    const maxScore = Math.max(scores.visual, scores.auditory, scores.kinesthetic, scores.reading);
+
+    if (scores.visual === maxScore) return 'visual';
+    if (scores.auditory === maxScore) return 'auditory';
+    if (scores.kinesthetic === maxScore) return 'kinesthetic';
+    return 'reading';
+  };
+
+  const studyMethodInfo = {
+    visual: {
+      name: 'Visual Learner',
+      description: 'You learn best through seeing and observing. Visual aids, diagrams, charts, and color-coded notes are your superpower.',
+      icon: '👁️',
+      strengths: ['Remembering images and spatial layouts', 'Understanding charts and diagrams', 'Recognizing patterns and visual details', 'Creating mental pictures'],
+      stepByStep: [
+        'Use color-coding: Assign different colors to different topics or concepts',
+        'Create mind maps: Draw connections between ideas with branches and visual elements',
+        'Watch educational videos: Find video explanations before reading textbooks',
+        'Draw diagrams: Convert written information into flowcharts, timelines, or illustrations',
+        'Use flashcards with images: Include visuals alongside text on your flashcards',
+        'Highlight strategically: Use different colored highlighters for different types of information',
+        'Create visual summaries: After each study session, create a one-page visual summary'
+      ]
+    },
+    auditory: {
+      name: 'Auditory Learner',
+      description: 'You learn best through listening and speaking. Discussions, lectures, and talking through concepts help you understand and remember.',
+      icon: '👂',
+      strengths: ['Remembering spoken information', 'Learning from discussions and lectures', 'Explaining concepts verbally', 'Picking up on tone and inflection'],
+      stepByStep: [
+        'Record lectures: Listen to recordings while commuting or exercising',
+        'Read aloud: Say information out loud to yourself while studying',
+        'Discuss concepts: Form study groups to talk through material with peers',
+        'Create audio summaries: Record yourself explaining key concepts',
+        'Use mnemonic devices: Create rhymes, songs, or verbal patterns to remember information',
+        'Teach others: Explain what you\'ve learned to friends or family',
+        'Listen to educational podcasts: Find audio content related to your subjects'
+      ]
+    },
+    kinesthetic: {
+      name: 'Kinesthetic Learner',
+      description: 'You learn best through doing and experiencing. Hands-on activities, physical movement, and practical application work best for you.',
+      icon: '✋',
+      strengths: ['Learning by doing', 'Remembering through physical experiences', 'Understanding through real-world application', 'Staying engaged with active learning'],
+      stepByStep: [
+        'Take frequent breaks: Study in 25-minute blocks with 5-minute movement breaks',
+        'Use physical flashcards: Manually sort and organize cards while reviewing',
+        'Create models: Build physical representations of concepts when possible',
+        'Practice actively: Do practice problems, experiments, or simulations',
+        'Study while moving: Walk while reviewing notes or listening to recordings',
+        'Use gestures: Associate hand movements with concepts to aid memory',
+        'Apply immediately: Find real-world ways to use what you\'re learning right away'
+      ]
+    },
+    reading: {
+      name: 'Reading/Writing Learner',
+      description: 'You learn best through written words. Reading, writing, and taking detailed notes are your most effective study methods.',
+      icon: '📚',
+      strengths: ['Understanding written text', 'Taking comprehensive notes', 'Writing to process information', 'Remembering what you\'ve read and written'],
+      stepByStep: [
+        'Rewrite your notes: Summarize lecture notes in your own words',
+        'Create outlines: Organize information in hierarchical bullet-point lists',
+        'Write summaries: After each chapter or section, write a brief summary',
+        'Make lists: Create lists of key terms, concepts, and important points',
+        'Use textbooks effectively: Read actively with a pen, underlining and annotating',
+        'Create study guides: Write comprehensive study guides in your own words',
+        'Practice writing: Answer practice questions in full written responses'
+      ]
+    }
+  };
+
+  const progress = ((currentQuestion + 1) / questions.length) * 100;
+  const currentQ = questions[currentQuestion];
+  const selectedAnswer = answers[currentQuestion];
+
+  if (showResults) {
+    const scores = calculateResults(); console.log(scores);
+    const primaryMethod = getStudyMethod(scores);
+    const methodInfo = studyMethodInfo[primaryMethod];
+
+    const sortedScores = Object.entries(scores)
+      .sort(([, a], [, b]) => b - a)
+      .map(([key, value]) => ({ method: key, score: value }));
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[#2331df] via-[#65cddd] to-[#b4d7ff] flex items-center justify-center p-4">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="w-full max-w-4xl bg-[#1e1d6d] rounded-3xl shadow-2xl p-8 md:p-12"
+        >
+          <div className="text-center mb-8">
+            <div className="text-6xl mb-4">{methodInfo.icon}</div>
+            <h1 className="text-4xl mb-4 text-white">Your Learning Profile</h1>
+            <h2 className="text-3xl text-[#65cddd] mb-2">{methodInfo.name}</h2>
+            <p className="text-lg text-[#b4d7ff] max-w-2xl mx-auto">{methodInfo.description}</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 mb-8">
+            <div className="bg-[#0f188d] rounded-2xl p-6">
+              <h3 className="text-xl mb-4 text-[#b4d7ff]">Your Learning Strengths</h3>
+              <ul className="space-y-2">
+                {methodInfo.strengths.map((strength, index) => (
+                  <li key={index} className="flex items-start gap-2">
+                    <Check className="w-5 h-5 text-[#65cddd] flex-shrink-0 mt-0.5" />
+                    <span className="text-white">{strength}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="bg-[#0f188d] rounded-2xl p-6">
+              <h3 className="text-xl mb-4 text-[#b4d7ff]">Your Score Breakdown</h3>
+              <div className="space-y-3">
+                {sortedScores.map((item, index) => (
+                  <div key={item.method}>
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="capitalize text-sm text-white">
+                        {item.method === 'reading' ? 'Reading/Writing' : item.method}
+                      </span>
+                      <span className="text-sm text-[#65cddd]">{item.score} points</span>
+                    </div>
+                    <div className="h-2 bg-[#1e1d6d] rounded-full overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: `${(item.score / sortedScores[0].score) * 100}%` }}
+                        transition={{ duration: 1, delay: index * 0.1 }}
+                        className={`h-full ${
+                          index === 0 ? 'bg-[#65cddd]' : 'bg-[#2331df]'
+                        }`}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-[#2331df] to-[#65cddd] text-white rounded-2xl p-8">
+            <h3 className="text-2xl mb-6">Your Personalized Study Method</h3>
+            <p className="mb-6">Follow these steps to study anything effectively using your {methodInfo.name.toLowerCase()} style:</p>
+            <div className="space-y-4">
+              {methodInfo.stepByStep.map((step, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="flex gap-4 items-start bg-[#1e1d6d]/40 rounded-xl p-4 backdrop-blur-sm"
+                >
+                  <div className="w-8 h-8 rounded-full bg-white text-[#1e1d6d] flex items-center justify-center flex-shrink-0">
+                    {index + 1}
+                  </div>
+                  <p className="pt-1">{step}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-8 text-center">
+            <button
+              onClick={() => {
+                setShowResults(false);
+                setCurrentQuestion(0);
+                setAnswers(new Array(30).fill(-1));
+              }}
+              className="px-8 py-3 bg-[#65cddd] text-[#1e1d6d] rounded-full hover:bg-[#b4d7ff] transition-colors"
+            >
+              Retake Quiz
+            </button>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-[#2331df] via-[#65cddd] to-[#b4d7ff] flex items-center justify-center p-4">
+      <div className="w-full max-w-2xl">
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-2 text-white">
+            <span className="text-sm">
+              Question {currentQuestion + 1} of {questions.length}
+            </span>
+            <span className="text-sm">{Math.round(progress)}%</span>
+          </div>
+          <div className="h-2 bg-[#1e1d6d]/30 rounded-full overflow-hidden">
+            <motion.div
+              className="h-full bg-[#1e1d6d]"
+              initial={{ width: 0 }}
+              animate={{ width: `${progress}%` }}
+              transition={{ duration: 0.3 }}
+            />
+          </div>
+          <p className="text-white text-sm mt-2">{currentQ.category}</p>
+        </div>
+
+        <AnimatePresence mode="wait" custom={direction}>
+          <motion.div
+            key={currentQuestion}
+            custom={direction}
+            initial={{ opacity: 0, x: direction > 0 ? 100 : -100 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: direction > 0 ? -100 : 100 }}
+            transition={{ duration: 0.3 }}
+            className="bg-[#b4d7ff] rounded-3xl shadow-2xl p-8 md:p-12 min-h-[500px] flex flex-col"
+          >
+            <h2 className="text-2xl md:text-3xl mb-8 text-[#1e1d6d]">
+              {currentQ.question}
+            </h2>
+
+            <div className="space-y-4 flex-grow">
+              {currentQ.options.map((option, index) => (
+                <motion.button
+                  key={index}
+                  onClick={() => handleAnswer(index)}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`w-full p-4 md:p-6 rounded-2xl text-left transition-all ${
+                    selectedAnswer === index
+                      ? 'bg-[#0f188d] text-white shadow-lg'
+                      : 'bg-white hover:bg-[#65cddd]/20 text-[#1e1d6d]'
+                  }`}
+                >
+                  <div className="flex items-center gap-4">
+                    <div
+                      className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
+                        selectedAnswer === index
+                          ? 'border-white bg-white'
+                          : 'border-[#0f188d]'
+                      }`}
+                    >
+                      {selectedAnswer === index && (
+                        <div className="w-3 h-3 rounded-full bg-[#0f188d]" />
+                      )}
+                    </div>
+                    <span className="text-lg">{option}</span>
+                  </div>
+                </motion.button>
+              ))}
+            </div>
+
+            <div className="flex items-center justify-between mt-8 pt-6 border-t border-[#65cddd]/30">
+              <button
+                onClick={handlePrevious}
+                disabled={currentQuestion === 0}
+                className="flex items-center gap-2 px-6 py-3 rounded-full text-[#0f188d] hover:bg-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                <ChevronLeft className="w-5 h-5" />
+                Previous
+              </button>
+
+              <button
+                onClick={handleNext}
+                disabled={selectedAnswer === -1}
+                className="flex items-center gap-2 px-6 py-3 bg-[#0f188d] text-white rounded-full hover:bg-[#1e1d6d] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {currentQuestion === questions.length - 1 ? 'See Results' : 'Next'}
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}

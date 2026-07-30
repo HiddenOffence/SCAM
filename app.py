@@ -35,6 +35,11 @@ def init_db():
     conn.close()
 
 
+@app.route("/Quiz")
+def Quiz():
+    return render_template("Quiz_page.html")
+
+
 @app.route("/")
 def home():
     return render_template("index.html", questions=questions)
@@ -86,8 +91,8 @@ def submit():
         auditory=scores["B"],
         practical=scores["C"],
         reading=scores["D"],
-        recommendation=recommendation
-    )
+        recommendation=recommendation)
+
 
 if __name__ == "__main__":
     init_db()
