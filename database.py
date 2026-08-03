@@ -77,7 +77,7 @@ def create_tables():
             kinesthetic INTEGER,
             read_write INTEGER
         )
-        """)
-
+        """)    
+    
     conn.commit()
     conn.close()
