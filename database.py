@@ -16,43 +16,68 @@ def create_tables():
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS questions (
-        question_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        question_text TEXT NOT NULL,
-        category TEXT
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        question_text TEXT
     )
     """)
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS answers (
-        answer_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         question_id INTEGER,
-        answer_text TEXT,
-        study_method TEXT,
+        text TEXT,
+        visual INTEGER,
+        kinesthetic INTEGER,
+        auditory INNTEGER,
+        read_write INTEGER,
         FOREIGN KEY(question_id)
-            REFERENCES questions(question_id)
+            REFERENCES questions(id)
     )
     """)
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS study_methods (
-        method_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        method_name TEXT,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
         description TEXT,
+        tips TEXT,
         youtube_link TEXT,
         spotify_playlist TEXT,
-        image TEXT
+        image
     )
     """)
+    
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS answer_study_methods (
+            answer_id INTEGER,
+            method_id INTEGER,
+            points INTEGER,
+            FOREIGN KEY(answer_id)
+                        REFERENCES answers(id)
+            FOREIGN KEY(method_id)
+                                    REFERENCES study_method(id)
+        )
+        """)
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS reviews (
-        review_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        student_name TEXT,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
         rating INTEGER,
         comment TEXT,
         date_posted TEXT
     )
     """)
+    
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS results (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            visual INTEGER,
+            auditory INTEGER,
+            kinesthetic INTEGER,
+            read_write INTEGER
+        )
+        """)
 
     conn.commit()
     conn.close()
