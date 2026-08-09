@@ -465,3 +465,52 @@ def populate_answers():
 
     conn.commit()
     conn.close()
+
+
+def populate_answer_study_methods():
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    # Study method IDs
+    VISUAL = 1
+    AUDITORY = 2
+    KINESTHETIC = 3
+    READ_WRITE = 4
+
+    relationships = []
+
+    # Every question has:
+    # A = Visual
+    # B = Auditory
+    # C = Kinesthetic
+    # D = Read/Write
+
+    for question_id in range(1, 31):
+
+        first_answer_id = (question_id - 1) * 4 + 1
+
+        relationships.append(
+            (first_answer_id, VISUAL, 1)
+        )
+
+        relationships.append(
+            (first_answer_id + 1, AUDITORY, 1)
+        )
+
+        relationships.append(
+            (first_answer_id + 2, KINESTHETIC, 1)
+        )
+
+        relationships.append(
+            (first_answer_id + 3, READ_WRITE, 1)
+        )
+
+    cursor.executemany("""
+        INSERT OR IGNORE INTO answer_study_methods
+        (answer_id, method_id, points)
+        VALUES (?, ?, ?)
+    """, relationships)
+
+    conn.commit()
+    conn.close()
