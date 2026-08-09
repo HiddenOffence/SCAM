@@ -1,6 +1,5 @@
 from flask import Flask, render_template
-
-from database import create_tables
+from database import create_tables, populate_study_methods
 
 
 app = Flask(__name__)
@@ -34,5 +33,6 @@ def reviews():
 if __name__ == "__main__":
 
     create_tables()
+    populate_study_methods()
 
     app.run(debug=True)
