@@ -2,7 +2,8 @@ from flask import Flask, render_template
 from database import (
     create_tables,
     populate_study_methods,
-    populate_sections
+    populate_sections,
+    populate_questions
 )
 
 
@@ -39,5 +40,6 @@ if __name__ == "__main__":
     create_tables()
     populate_study_methods()
     populate_sections()
+    populate_questions()
 
     app.run(debug=True)

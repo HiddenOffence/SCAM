@@ -211,3 +211,63 @@ def populate_sections():
 
     conn.commit()
     conn.close()
+
+
+def populate_questions():
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    questions = [
+
+        # Learning Style
+        (1, "When learning something new, I prefer to:"),
+        (1, "In class I remember best when:"),
+        (1, "If I forget something, I usually:"),
+        (1, "My notes usually include:"),
+        (1, "When studying, I like to:"),
+
+        # Memory Habits
+        (2, "I remember information best when:"),
+        (2, "I usually forget things when:"),
+        (2, "The easiest way for me to learn definitions is:"),
+        (2, "Before a test I usually:"),
+        (2, "I learn fastest when:"),
+
+        # Study Preferences
+        (3, "I prefer studying:"),
+        (3, "My ideal study session includes:"),
+        (3, "When homework is hard I:"),
+        (3, "I enjoy subjects where I:"),
+        (3, "I lose focus when:"),
+
+        # Motivation
+        (4, "I stay motivated when:"),
+        (4, "I prefer instructions that are:"),
+        (4, "I like studying when:"),
+        (4, "I enjoy learning through:"),
+        (4, "I focus best when:"),
+
+        # Study Behaviour
+        (5, "I usually study by:"),
+        (5, "When revising I:"),
+        (5, "When I understand something I:"),
+        (5, "If a topic is confusing I:"),
+        (5, "My best school subjects involve:"),
+
+        # Focus & Habits
+        (6, "I get distracted when:"),
+        (6, "I prefer revision that is:"),
+        (6, "I feel confident when I:"),
+        (6, "The hardest studying for me is:"),
+        (6, "I think studying works best when I:")
+    ]
+
+    cursor.executemany("""
+        INSERT OR IGNORE INTO questions
+        (section_id, question_text)
+        VALUES (?, ?)
+    """, questions)
+
+    conn.commit()
+    conn.close()
