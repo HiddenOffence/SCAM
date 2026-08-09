@@ -18,6 +18,54 @@ def create_tables():
     conn = get_connection()
     cursor = conn.cursor()
 
+    methods = [
+        (
+            "Visual",
+            "You may benefit from learning through diagrams, images, colours, charts and visual organisation.",
+            "Try diagrams, mind maps, colour coding, videos and visual summaries.",
+            "",
+            "",
+            ""
+        ),
+        (
+            "Auditory",
+            "You may benefit from learning through listening, explaining ideas and discussing information.",
+            "Try explaining concepts aloud, discussing ideas with others and using spoken summaries.",
+            "",
+            "",
+            ""
+        ),
+        (
+            "Kinesthetic",
+            "You may benefit from active, practical and hands-on approaches to learning.",
+            "Try practice activities, demonstrations, experiments and learning by doing.",
+            "",
+            "",
+            ""
+        ),
+        (
+            "Read/Write",
+            "You may benefit from learning through reading, writing and organising information in words.",
+            "Try written summaries, notes, lists, flashcards and practice questions.",
+            "",
+            "",
+            ""
+        )
+    ]
+
+    cursor.executemany("""
+        INSERT OR IGNORE INTO study_methods
+        (
+            name,
+            description,
+            tips,
+            youtube_link,
+            spotify_playlist,
+            image
+        )
+        VALUES (?, ?, ?, ?, ?, ?)
+    """, methods)
+
     # Questions
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS questions (
