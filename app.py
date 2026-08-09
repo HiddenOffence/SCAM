@@ -1,5 +1,9 @@
 from flask import Flask, render_template
-from database import create_tables, populate_study_methods
+from database import (
+    create_tables,
+    populate_study_methods,
+    populate_sections
+)
 
 
 app = Flask(__name__)
@@ -34,5 +38,6 @@ if __name__ == "__main__":
 
     create_tables()
     populate_study_methods()
+    populate_sections()
 
     app.run(debug=True)

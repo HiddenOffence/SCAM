@@ -169,3 +169,45 @@ def populate_study_methods():
 
     conn.commit()
     conn.close()
+
+
+def populate_sections():
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    sections = [
+        (
+            "Learning Style",
+            "Explore how you prefer to receive and understand new information."
+        ),
+        (
+            "Memory Habits",
+            "Explore how you remember and revise information."
+        ),
+        (
+            "Study Preferences",
+            "Explore the types of study activities and environments you prefer."
+        ),
+        (
+            "Motivation",
+            "Explore what helps you stay motivated while studying."
+        ),
+        (
+            "Study Behaviour",
+            "Explore how you currently approach studying and revision."
+        ),
+        (
+            "Focus & Habits",
+            "Explore the habits and conditions that affect your concentration."
+        )
+    ]
+
+    cursor.executemany("""
+        INSERT OR IGNORE INTO sections
+        (name, description)
+        VALUES (?, ?)
+    """, sections)
+
+    conn.commit()
+    conn.close()
