@@ -18,11 +18,24 @@ def create_tables():
     conn = get_connection()
     cursor = conn.cursor()
 
+    # Quiz sections
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS sections (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        description TEXT
+    )
+    """)
+
     # Questions
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS questions (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        question_text TEXT NOT NULL
+        section_id INTEGER NOT NULL,
+        question_text TEXT NOT NULL,
+
+        FOREIGN KEY (section_id)
+            REFERENCES sections(id)
     )
     """)
 
