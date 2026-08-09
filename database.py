@@ -41,19 +41,15 @@ def create_tables():
 
     # Answers
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS answers (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        question_id INTEGER NOT NULL,
-        text TEXT NOT NULL,
-        visual INTEGER DEFAULT 0,
-        kinesthetic INTEGER DEFAULT 0,
-        auditory INTEGER DEFAULT 0,
-        read_write INTEGER DEFAULT 0,
+CREATE TABLE IF NOT EXISTS answers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    question_id INTEGER NOT NULL,
+    text TEXT NOT NULL,
 
-        FOREIGN KEY (question_id)
-            REFERENCES questions(id)
-    )
-    """)
+    FOREIGN KEY (question_id)
+        REFERENCES questions(id)
+)
+""")
 
     # Study methods
     cursor.execute("""
