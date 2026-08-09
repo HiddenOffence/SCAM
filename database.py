@@ -267,3 +267,201 @@ def populate_questions():
 
     conn.commit()
     conn.close()
+
+
+def populate_answers():
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    answers = [
+
+        # Question 1
+        (1, "See diagrams or pictures"),
+        (1, "Listen to explanations"),
+        (1, "Try it myself"),
+        (1, "Read instructions"),
+
+        # Question 2
+        (2, "The teacher uses slides or drawings"),
+        (2, "The teacher explains verbally"),
+        (2, "We do activities"),
+        (2, "I take notes"),
+
+        # Question 3
+        (3, "Picture it in my mind"),
+        (3, "Say it in my head"),
+        (3, "Practice again"),
+        (3, "Re-read it"),
+
+        # Question 4
+        (4, "Colors and diagrams"),
+        (4, "Key phrases"),
+        (4, "Examples"),
+        (4, "Full sentences"),
+
+        # Question 5
+        (5, "Highlight and draw"),
+        (5, "Talk out loud"),
+        (5, "Move around"),
+        (5, "Read quietly"),
+
+        # Question 6
+        (6, "I see it"),
+        (6, "I hear it"),
+        (6, "I do it"),
+        (6, "I write it"),
+
+        # Question 7
+        (7, "There are no visuals"),
+        (7, "Nobody explains"),
+        (7, "I don't practice"),
+        (7, "I don't review notes"),
+
+        # Question 8
+        (8, "Diagrams"),
+        (8, "Saying them aloud"),
+        (8, "Using examples"),
+        (8, "Writing them"),
+
+        # Question 9
+        (9, "Look at summaries"),
+        (9, "Explain topics aloud"),
+        (9, "Practice questions"),
+        (9, "Read notes"),
+
+        # Question 10
+        (10, "I can see patterns"),
+        (10, "Someone teaches me"),
+        (10, "I experiment"),
+        (10, "I read"),
+
+        # Question 11
+        (11, "With visual tools"),
+        (11, "With someone"),
+        (11, "Hands-on"),
+        (11, "Alone"),
+
+        # Question 12
+        (12, "Mindmaps"),
+        (12, "Discussion"),
+        (12, "Activities"),
+        (12, "Reading"),
+
+        # Question 13
+        (13, "Draw it out"),
+        (13, "Ask someone"),
+        (13, "Try different ways"),
+        (13, "Check notes"),
+
+        # Question 14
+        (14, "See diagrams"),
+        (14, "Listen"),
+        (14, "Build or test"),
+        (14, "Read"),
+
+        # Question 15
+        (15, "It's boring visually"),
+        (15, "It's silent"),
+        (15, "I'm sitting too long"),
+        (15, "It's confusing"),
+
+        # Question 16
+        (16, "Work looks organized"),
+        (16, "Someone encourages me"),
+        (16, "I see progress"),
+        (16, "I understand it"),
+
+        # Question 17
+        (17, "Visual"),
+        (17, "Spoken"),
+        (17, "Demonstrated"),
+        (17, "Written"),
+
+        # Question 18
+        (18, "It looks neat"),
+        (18, "I can talk"),
+        (18, "It's interactive"),
+        (18, "It's clear"),
+
+        # Question 19
+        (19, "Videos"),
+        (19, "Podcasts"),
+        (19, "Experiments"),
+        (19, "Books"),
+
+        # Question 20
+        (20, "My notes look good"),
+        (20, "There is background sound"),
+        (20, "I take breaks"),
+        (20, "It's quiet"),
+
+        # Question 21
+        (21, "Highlighting"),
+        (21, "Explaining"),
+        (21, "Practicing"),
+        (21, "Reading"),
+
+        # Question 22
+        (22, "Use colors"),
+        (22, "Say things aloud"),
+        (22, "Solve problems"),
+        (22, "Re-read"),
+
+        # Question 23
+        (23, "Can visualize it"),
+        (23, "Can explain it"),
+        (23, "Can do it"),
+        (23, "Can describe it"),
+
+        # Question 24
+        (24, "Find diagrams"),
+        (24, "Watch videos"),
+        (24, "Try questions"),
+        (24, "Read textbook"),
+
+        # Question 25
+        (25, "Visual ideas"),
+        (25, "Listening"),
+        (25, "Practical work"),
+        (25, "Reading"),
+
+        # Question 26
+        (26, "Notes look messy"),
+        (26, "It's too quiet"),
+        (26, "I sit too long"),
+        (26, "Text is long"),
+
+        # Question 27
+        (27, "Colorful"),
+        (27, "Spoken"),
+        (27, "Active"),
+        (27, "Written"),
+
+        # Question 28
+        (28, "See summaries"),
+        (28, "Explain topics"),
+        (28, "Practice questions"),
+        (28, "Review notes"),
+
+        # Question 29
+        (29, "Plain text"),
+        (29, "Silent reading"),
+        (29, "Sitting still"),
+        (29, "Long explanations"),
+
+        # Question 30
+        (30, "See it"),
+        (30, "Hear it"),
+        (30, "Do it"),
+        (30, "Read it")
+    ]
+
+    cursor.executemany("""
+        INSERT INTO answers
+        (question_id, text)
+        VALUES (?, ?)
+    """, answers)
+
+    conn.commit()
+    conn.close()

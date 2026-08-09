@@ -3,7 +3,8 @@ from database import (
     create_tables,
     populate_study_methods,
     populate_sections,
-    populate_questions
+    populate_questions,
+    populate_answers
 )
 
 
@@ -41,5 +42,6 @@ if __name__ == "__main__":
     populate_study_methods()
     populate_sections()
     populate_questions()
+    populate_answers()
 
     app.run(debug=True)
