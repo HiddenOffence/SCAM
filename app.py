@@ -1,25 +1,9 @@
-from flask import Flask, render_template, request, redirect
-import sqlite3
+from flask import Flask, render_template
+
+from database import create_tables
+
 
 app = Flask(__name__)
-
-
-def init_db():
-    conn = sqlite3.connect("quiz.db")
-    c = conn.cursor()
-
-    c.execute("""
-    CREATE TABLE IF NOT EXISTS results (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        visual INTEGER,
-        auditory INTEGER,
-        practical INTEGER,
-        reading INTEGER
-    )
-    """)
-
-    conn.commit()
-    conn.close()
 
 
 @app.route("/")
@@ -48,5 +32,7 @@ def reviews():
 
 
 if __name__ == "__main__":
-    init_db()
+
+    create_tables()
+
     app.run(debug=True)
