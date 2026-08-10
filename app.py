@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from database import (
     create_tables,
+    get_sections,
     populate_study_methods,
     populate_sections,
     populate_questions,
@@ -24,7 +25,7 @@ def about():
 
 @app.route("/quiz")
 def quiz():
-    return render_template("quiz.html")
+    return render_template("quiz.html", sections=sections)
 
 
 @app.route("/results")
@@ -40,6 +41,7 @@ def reviews():
 if __name__ == "__main__":
 
     create_tables()
+    get_sections()
     populate_study_methods()
     populate_sections()
     populate_questions()

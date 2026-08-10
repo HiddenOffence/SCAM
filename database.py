@@ -13,6 +13,20 @@ def get_connection():
     return conn
 
 
+def get_sections():
+    conn = get_connection()
+
+    sections = conn.execute("""
+        SELECT id, name, description
+        FROM sections
+        ORDER BY id
+    """).fetchall()
+
+    conn.close()
+
+    return sections
+
+
 def create_tables():
 
     conn = get_connection()
@@ -41,7 +55,7 @@ def create_tables():
 
     # Answers
     cursor.execute("""
-CREATE TABLE IF NOT EXISTS answers (
+    CREATE TABLE IF NOT EXISTS answers (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     question_id INTEGER NOT NULL,
     text TEXT NOT NULL,
@@ -89,17 +103,6 @@ CREATE TABLE IF NOT EXISTS answers (
         rating INTEGER NOT NULL,
         comment TEXT NOT NULL,
         date_posted TEXT NOT NULL
-    )
-    """)
-
-    # Results
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS results (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        visual INTEGER DEFAULT 0,
-        auditory INTEGER DEFAULT 0,
-        kinesthetic INTEGER DEFAULT 0,
-        read_write INTEGER DEFAULT 0
     )
     """)
 
