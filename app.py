@@ -2,11 +2,7 @@ from flask import Flask, render_template
 from database import (
     create_tables,
     get_sections,
-    populate_study_methods,
-    populate_sections,
-    populate_questions,
-    populate_answers,
-    populate_answer_study_methods
+    get_questions_by_section
 )
 
 
@@ -25,7 +21,22 @@ def about():
 
 @app.route("/quiz")
 def quiz():
+    sections = get_sections()
     return render_template("quiz.html", sections=sections)
+
+
+@app.route("/quiz/<int:section_id>")
+def quiz_section(section_id):
+
+    sections = get_sections()
+    questions = get_questions_by_section(section_id)
+
+    return render_template(
+        "quiz_section.html",
+        sections=sections,
+        questions=questions,
+        section_id=section_id
+    )
 
 
 @app.route("/results")
@@ -41,11 +52,5 @@ def reviews():
 if __name__ == "__main__":
 
     create_tables()
-    get_sections()
-    populate_study_methods()
-    populate_sections()
-    populate_questions()
-    populate_answers()
-    populate_answer_study_methods()
 
     app.run(debug=True)

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>SCAM Don't CRAM - Quiz</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body>
+
+<div class="page">
+
+    <h1>Quiz Section</h1>
+
+    {% for question in questions %}
+
+        <div class="question">
+
+            <h2>
+                {{ loop.index }}. {{ question["question_text"] }}
+            </h2>
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+</body>
+
+</html>
