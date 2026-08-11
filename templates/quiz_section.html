@@ -2,33 +2,50 @@
 <html>
 
 <head>
-    <title>SCAM Don't CRAM - Quiz</title>
+
+    <title>
+        {{ section["name"] }} - SCAM Don't CRAM
+    </title>
 
     <link
         rel="stylesheet"
-        href="{{ url_for('static', filename='css/style.css') }}"
+        href="/static/css/style.css"
     >
+
 </head>
 
 <body>
 
-<div class="page">
+    <div class="section-intro">
 
-    <h1>Quiz Section</h1>
+        <div class="section-intro-card">
 
-    {% for question in questions %}
+            <p class="section-number">
+                Section
+            </p>
 
-        <div class="question">
+            <h1>
+                {{ section["name"] }}
+            </h1>
 
-            <h2>
-                {{ loop.index }}. {{ question["question_text"] }}
-            </h2>
+            <p class="section-description">
+                {{ section["description"] }}
+            </p>
+
+            <p class="question-count">
+                5 questions
+            </p>
+
+            <a
+                href="/templates/quiz.html"
+                class="continue-button"
+            >
+                Start Section →
+            </a>
 
         </div>
 
-    {% endfor %}
-
-</div>
+    </div>
 
 </body>
 

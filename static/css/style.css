@@ -1,6 +1,5 @@
 /* ===========================================
    SCAM Don't CRAM
-   Global Design System
 =========================================== */
 
 :root{
@@ -320,3 +319,120 @@ body{
 
 }
 
+/* Quiz page */
+.quiz-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 50px 30px;
+}
+
+.quiz-page h1 {
+    text-align: center;
+    font-size: 42px;
+    margin-bottom: 10px;
+}
+
+.quiz-intro {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 40px;
+}
+
+.section-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}
+
+.section-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    text-decoration: none;
+    color: #18236b;
+    transition: 0.2s;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.section-card:hover {
+    transform: translateY(-5px);
+}
+
+.section-card h2 {
+    margin-bottom: 10px;
+}
+
+.section-card p {
+    margin-bottom: 20px;
+}
+
+.section-card span {
+    font-weight: bold;
+}
+
+.section-intro {
+    min-height: 80vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 30px;
+}
+
+.section-intro-card {
+    width: 600px;
+    max-width: 90%;
+
+    background: #b9d5f5;
+
+    border-radius: 25px;
+
+    padding: 50px;
+
+    text-align: center;
+
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.section-number {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.section-intro-card h1 {
+    font-size: 42px;
+    margin: 15px 0;
+}
+
+.section-description {
+    font-size: 20px;
+    line-height: 1.5;
+}
+
+.question-count {
+    margin: 25px 0;
+    font-weight: bold;
+}
+
+.continue-button {
+    display: inline-block;
+
+    padding: 15px 35px;
+
+    background: white;
+
+    border-radius: 30px;
+
+    color: #293dcc;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+    transition: 0.2s;
+}
+
+.continue-button:hover {
+    transform: translateY(-2px);
+}

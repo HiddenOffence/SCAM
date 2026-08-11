@@ -2,7 +2,8 @@ from flask import Flask, render_template
 from database import (
     create_tables,
     get_sections,
-    get_questions_by_section
+    get_questions_by_section,
+    get_answers_by_question
 )
 
 
@@ -29,11 +30,19 @@ def quiz():
 def quiz_section(section_id):
 
     sections = get_sections()
+
     questions = get_questions_by_section(section_id)
+
+    section = None
+
+    for item in sections:
+        if item["id"] == section_id:
+            section = item
+            break
 
     return render_template(
         "quiz_section.html",
-        sections=sections,
+        section=section,
         questions=questions,
         section_id=section_id
     )

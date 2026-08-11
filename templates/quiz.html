@@ -2,44 +2,47 @@
 <html>
 
 <head>
-    <title>SCAM Don't CRAM - Quiz</title>
+    <title>Study Method Discovery Quiz</title>
 
     <link
-        rel="stylesheet" href="/static/css/style.css"
+        rel="stylesheet"
+        href="/static/css/style.css"
     >
 </head>
 
 <body>
 
-<div class="page">
+    <div class="quiz-page">
 
-    <h1>Study Method Discovery Quiz</h1>
+        <h1>Study Method Discovery Quiz 🧠</h1>
 
-    <p>
-        Choose a section to begin.
-    </p>
+        <p class="quiz-intro">
+            Choose a section to begin.
+        </p>
 
-    <div class="sections">
+        <div class="section-grid">
 
-        {% for section in sections %}
+            {% for section in sections %}
 
-        <div class="section-card">
+                <a
+                    href="/templates/quiz_section.html"
+                    class="section-card"
+                >
 
-            <h2>
-                {{ section["name"] }}
-            </h2>
+                    <h2>{{ section["name"] }}</h2>
 
-            <p>
-                {{ section["description"] }}
-            </p>
+                    <p>{{ section["description"] }}</p>
+
+                    <span>Start section →</span>
+
+                </a>
+
+            {% endfor %}
 
         </div>
 
-        {% endfor %}
-
     </div>
 
-</div>
-
 </body>
+
 </html>

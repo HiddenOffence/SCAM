@@ -42,6 +42,21 @@ def get_questions_by_section(section_id):
     return questions
 
 
+def get_answers_by_question(question_id):
+    conn = get_connection()
+
+    answers = conn.execute("""
+        SELECT id, question_id, text
+        FROM answers
+        WHERE question_id = ?
+        ORDER BY id
+    """, (question_id,)).fetchall()
+
+    conn.close()
+
+    return answers
+
+
 def create_tables():
 
     conn = get_connection()
