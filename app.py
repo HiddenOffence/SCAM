@@ -48,6 +48,28 @@ def quiz_section(section_id):
     )
 
 
+@app.route("/quiz/<int:section_id>/question/<int:question_index>")
+def question(section_id, question_index):
+
+    questions = get_questions_by_section(section_id)
+
+    if question_index < 0 or question_index >= len(questions):
+        return "Question not found", 404
+
+    current_question = questions[question_index]
+
+    answers = get_answers_by_question(current_question["id"])
+
+    return render_template(
+        "question.html",
+        question=current_question,
+        answers=answers,
+        section_id=section_id,
+        question_index=question_index,
+        total_questions=len(questions)
+    )
+
+
 @app.route("/results")
 def results():
     return render_template("results.html")

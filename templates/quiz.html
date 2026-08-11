@@ -25,7 +25,7 @@
             {% for section in sections %}
 
                 <a
-                    href="/templates/quiz_section.html"
+                    href="{{ url_for('quiz_section', section_id=section['id']) }}"
                     class="section-card"
                 >
 

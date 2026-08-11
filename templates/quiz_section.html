@@ -37,7 +37,11 @@
             </p>
 
             <a
-                href="/templates/quiz.html"
+                href="{{ url_for(
+                    'question',
+                    section_id=section_id,
+                    question_index=0
+                ) }}"
                 class="continue-button"
             >
                 Start Section →
