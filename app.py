@@ -69,9 +69,21 @@ def question(section_id, question_index):
         current_question["id"]
     )
 
+    # To get the current section information
+    sections = get_sections()
+    current_section = None
+
+    for item in sections:
+        if item["id"] == section_id:
+            current_section = item
+            break
+
     # Created to temporarily store quiz answers
     if "quiz_answers" not in session:
         session["quiz_answers"] = {}
+
+    # Check whether this question was answered before
+    selected_answer = session["quiz_answers"].get(str(current_question["id"]))
 
     # Runs when the user presses Next or Continue
     if request.method == "POST":
@@ -82,10 +94,12 @@ def question(section_id, question_index):
                 "question.html",
                 question=current_question,
                 answers=answer_options,
+                section=current_section,
                 section_id=section_id,
                 question_index=question_index,
-                total_questions=len(questions)
-            )
+                total_questions=len(questions),
+                selected_answer=selected_answer)
+
         # Saves this answer in the session
         quiz_answers = session["quiz_answers"]
 
@@ -123,10 +137,11 @@ def question(section_id, question_index):
         "question.html",
         question=current_question,
         answers=answer_options,
+        section=current_section,
         section_id=section_id,
         question_index=question_index,
-        total_questions=len(questions)
-    )
+        total_questions=len(questions),
+        selected_answer=selected_answer)
 
 
 @app.route("/results")
