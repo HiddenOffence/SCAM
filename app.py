@@ -54,47 +54,79 @@ def quiz_section(section_id):
     methods=["GET", "POST"])
 def question(section_id, question_index):
 
+    # Getting the 5 questions that belong to this section
     questions = get_questions_by_section(section_id)
 
+    # Stops from creating invalid question numbers
     if question_index < 0 or question_index >= len(questions):
         return "Question not found", 404
 
+    # Getting the current question
     current_question = questions[question_index]
 
-    answers = get_answers_by_question(current_question["id"])
+    # Getting the 4 answers for this question
+    answer_options = get_answers_by_question(
+        current_question["id"]
+    )
+
+    # Created to temporarily store quiz answers
+    if "quiz_answers" not in session:
+        session["quiz_answers"] = {}
+
+    # Runs when the user presses Next or Continue
     if request.method == "POST":
         selected_answer = request.form.get("answer")
-        if selected_answer:
-            if "answers" not in session:
-                session["answers"] = {}
-            answers_dict = session["answers"]
-            answers_dict[str(current_question["id"])] = selected_answer
-            session["answers"] = answers_dict
 
-            if question_index + 1 < len(questions):
-                # Move to the next question in this section
-                return redirect(url_for("question",
-                                        section_id=section_id,
-                                        question_index=question_index + 1))
-            elif section_id < 6:
-                # Show the introduction card for the next section
-                return redirect(
-                    url_for("quiz_section", section_id=section_id + 1))
+        if selected_answer is None:
+            return render_template(
+                "question.html",
+                question=current_question,
+                answers=answer_options,
+                section_id=section_id,
+                question_index=question_index,
+                total_questions=len(questions)
+            )
+        # Saves this answer in the session
+        quiz_answers = session["quiz_answers"]
 
-            else:
+        quiz_answers[
+            str(current_question["id"])
+        ] = int(selected_answer)
 
-                # Finished Section 6 and therefore the whole quiz.
-                return redirect(
-                    url_for("results")
-                )
-
-        return render_template(
-                    "question.html",
-                    question=current_question,
-                    answers=answers,
+        session["quiz_answers"] = quiz_answers
+        # Questions 1-4:
+        # Moving to the next question
+        if question_index + 1 < len(questions):
+            return redirect(
+                url_for(
+                    "question",
                     section_id=section_id,
-                    question_index=question_index,
-                    total_questions=len(questions))
+                    question_index=question_index + 1
+                )
+            )
+        # Question 5 in Sections 1-5:
+        # Shows the NEXT section introduction card
+        if section_id < 6:
+
+            return redirect(
+                url_for(
+                    "quiz_section",
+                    section_id=section_id + 1
+                )
+            )
+        # Quiz finishes
+        return redirect(
+            url_for("results")
+        )
+
+    return render_template(
+        "question.html",
+        question=current_question,
+        answers=answer_options,
+        section_id=section_id,
+        question_index=question_index,
+        total_questions=len(questions)
+    )
 
 
 @app.route("/results")
