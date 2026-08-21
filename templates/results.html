@@ -2,6 +2,8 @@
 
 {% block content %}
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <section class="results-page">
 
     <div class="results-heading">
@@ -50,6 +52,26 @@
 
         </div>
 
+        <div class="results-chart-card">
+
+            <h2>Your Study Strategy Profile</h2>
+
+            <p>
+                This graph shows how strongly your quiz responses
+                matched each study strategy.
+            </p>
+
+            <div class="chart-container">
+
+                <canvas
+                    id="resultsChart"
+                    data-labels='{{ results | map(attribute="name") | list | tojson }}'
+                    data-scores='{{ results | map(attribute="score") | list | tojson }}'
+                ></canvas>
+
+            </div>
+
+        </div>
 
         <div class="all-results">
 
