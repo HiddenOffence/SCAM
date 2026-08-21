@@ -20,37 +20,86 @@
     </div>
 
 
-    {% if top_result %}
+    {% if top_results %}
 
         <div class="top-result-card">
 
-            <p class="result-badge">
-                TOP RECOMMENDATION
-            </p>
+            {% if top_results|length == 1 %}
 
-            <h2>
-                {{ top_result["name"] }}
-            </h2>
+                <p class="result-badge">
+                    TOP RECOMMENDATION
+                </p>
 
-            <p class="result-description">
-                {{ top_result["description"] }}
-            </p>
+                <h2>
+                    {{ top_results[0]["name"] }}
+                </h2>
 
-            {% if top_result["tips"] %}
+                <p class="result-description">
+                    {{ top_results[0]["description"] }}
+                </p>
 
-                <div class="result-tips">
+                {% if top_results[0]["tips"] %}
 
-                    <h3>How to try it</h3>
+                    <div class="result-tips">
 
-                    <p>
-                        {{ top_result["tips"] }}
-                    </p>
+                        <h3>How to try it</h3>
+
+                        <p>
+                            {{ top_results[0]["tips"] }}
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+
+            {% else %}
+
+                <p class="result-badge">
+                    JOINT TOP RECOMMENDATIONS
+                </p>
+
+                <h2>
+                    You have {{ top_results|length }} strong matches
+                </h2>
+
+                <p class="result-description">
+                    Your responses matched these study strategies
+                    equally strongly. Try techniques from each and
+                    see which work best for different subjects and tasks.
+                </p>
+
+
+                <div class="tied-results">
+
+                    {% for result in top_results %}
+
+                        <div class="tied-result">
+
+                            <h3>
+                                {{ result["name"] }}
+                            </h3>
+
+                            <span>
+                                {{ result["score"] }} pts
+                            </span>
+
+                            <p>
+                                {{ result["description"] }}
+                            </p>
+
+                        </div>
+
+                    {% endfor %}
 
                 </div>
 
             {% endif %}
 
         </div>
+
+
+        <!-- RESULTS GRAPH -->
 
         <div class="results-chart-card">
 
@@ -72,6 +121,9 @@
             </div>
 
         </div>
+
+
+        <!-- ALL RESULT CARDS -->
 
         <div class="all-results">
 
@@ -119,38 +171,6 @@
 
                         {% endif %}
 
-
-                        <div class="resource-buttons">
-
-                            {% if result["youtube_link"] %}
-
-                                <a
-                                    href="{{ result['youtube_link'] }}"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="resource-button"
-                                >
-                                    Watch Resource
-                                </a>
-
-                            {% endif %}
-
-
-                            {% if result["spotify_playlist"] %}
-
-                                <a
-                                    href="{{ result['spotify_playlist'] }}"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="resource-button"
-                                >
-                                    Study Playlist
-                                </a>
-
-                            {% endif %}
-
-                        </div>
-
                     </div>
 
                 {% endfor %}
@@ -160,21 +180,24 @@
         </div>
 
 
+        <!-- ACTION BUTTONS -->
+
         <div class="results-actions">
 
+            <a
+                href="{{ url_for('quiz') }}"
+                class="retake-quiz-button"
+            >
+                ↻ Retake Quiz
+            </a>
+
             <button
-                onclick="window.print()"
+                type="button"
                 class="save-pdf-button"
+                onclick="window.print()"
             >
                 Save Results as PDF
             </button>
-
-            <a
-                href="/templates/quiz.html"
-                class="retake-button"
-            >
-                Retake Quiz
-            </a>
 
         </div>
 
@@ -192,21 +215,28 @@
 
         </div>
 
+
     {% else %}
 
-        <div class="top-result-card">
+        <!-- USER HAS NOT COMPLETED THE QUIZ -->
 
-            <h2>No result could be calculated</h2>
+        <div class="no-results-card">
+
+            <div class="no-results-icon">
+                📚
+            </div>
+
+            <h1>No result could be calculated</h1>
 
             <p>
                 Please complete the quiz before viewing your results.
             </p>
 
             <a
-                href="{{ url_for('quiz') }}"
-                class="retake-button"
+                href="/quiz"
+                class="retake-quiz-button"
             >
-                Start Quiz
+                Start Quiz →
             </a>
 
         </div>

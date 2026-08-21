@@ -169,12 +169,21 @@ def results():
     quiz_results = calculate_quiz_results(answer_ids)
 
     # The first result has the highest score
-    top_result = quiz_results[0] if quiz_results else None
+    # Find all methods tied for the highest score
+    top_results = []
+
+    if quiz_results:
+        highest_score = quiz_results[0]["score"]
+        top_results = [
+            result
+            for result in quiz_results
+            if result["score"] == highest_score
+        ]
 
     return render_template(
         "results.html",
         results=quiz_results,
-        top_result=top_result
+        top_results=top_results
     )
 
 
