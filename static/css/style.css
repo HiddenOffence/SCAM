@@ -41,13 +41,7 @@ body{
     "Poppins",
     sans-serif;
 
-    background:
-
-    linear-gradient(
-        135deg,
-        var(--primary-blue),
-        var(--secondary-blue)
-    );
+    background: linear-gradient(to bottom right, #2331df, #65cddd, #b4d7ff);
 
     min-height:100vh;
 
@@ -441,7 +435,8 @@ body{
     display: flex;
     justify-content: space-between;
     margin-bottom: 8px;
-    font-weight: bold;
+    font-weight: light;
+    font-size: 14px;
 }
 
 .progress-bar {
@@ -459,33 +454,38 @@ body{
 }
 
 .quiz-section-title {
-    font-weight: bold;
+    font-weight: medium;
     margin-bottom: 15px;
+    font-size: 15;
 }
 
 .question-card {
     background: #b9d5f5;
     border-radius: 25px;
-    padding: 40px;
+    padding: 50px;
 }
 
 .question-card h1 {
-    font-size: 28px;
+    font-size: 27px;
     line-height: 1.4;
     margin-bottom: 30px;
+    font-weight: 550;
+    color: #1e1d6d;
+    font-family: sans-serif;
 }
 
 .answer-options {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    padding: calc(var(--spacing) * 6);
 }
 
 .answer-option {
     display: flex;
     align-items: center;
     gap: 15px;
-    color: blue;
+    color: #1e1d6d;
     background: white;
     border-radius: 15px;
 
@@ -498,11 +498,20 @@ body{
 
 .answer-option:hover {
     transform: translateY(-2px);
+    background-color: #b9d5f5;
+    opacity: 1;
 }
 
 .answer-option input {
     width: 20px;
     height: 20px;
+    background-color: #1e1d6d;
+}
+
+.answer-option:has(input:checked) {
+    background-color: darkblue;
+    color: white;
+    border-color: darkblue;
 }
 
 .quiz-navigation {
@@ -515,18 +524,46 @@ body{
 
 .previous-button,
 .next-button {
-    padding: 12px 25px;
-    border-radius: 25px;
+
+    display: inline-block;
+
+    padding: 15px 35px;
+
+    border-radius: 30px;
+
+    border: none;
+
+    cursor: pointer;
+
+    font-family: "Poppins", sans-serif;
+
+    font-size: 16px;
+
+    font-weight: 600;
 
     text-decoration: none;
-    font-weight: bold;
+
+    transition: .25s;
 }
 
 .previous-button {
     color: #6878b5;
 }
 
-.next-button {
-    background: #657fd0;
-    color: white;
+.next-button{
+
+    background:white;
+
+    color:#2946D7;
+
+    border:none;
+
+    box-shadow:0 8px 18px rgba(0,0,0,.15);
+
+}
+
+.next-button:hover{
+
+    transform:translateY(-3px);
+
 }

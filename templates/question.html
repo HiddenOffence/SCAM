@@ -46,74 +46,79 @@
 
 
         <div class="question-card">
+            <form method="POST">
 
-            <h1>
-                {{ question["question_text"] }}
-            </h1>
+                <h1>
+                    {{ question["question_text"] }}
+                </h1>
 
 
-            <div class="answer-options">
+                <div class="answer-options">
 
-                {% for answer in answers %}
+                    {% for answer in answers %}
 
-                    <label class="answer-option">
+                        <label class="answer-option">
 
-                        <input
-                            type="radio"
-                            name="answer"
-                            value="{{ answer['id'] }}"
+                            <input
+                                type="radio"
+                                name="answer"
+                                value="{{ answer['id'] }}"
+                                required
+                            >
+
+                            <span>
+                                {{ answer["text"] }}
+                            </span>
+
+                        </label>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <div class="quiz-navigation">
+
+                    {% if question_index > 0 %}
+
+                        <a
+                            href="{{ url_for(
+                                'question',
+                                section_id=section_id,
+                                question_index=question_index - 1
+                            ) }}"
+                            class="previous-button"
                         >
+                            ← Previous
+                        </a>
 
-                        <span>
-                            {{ answer["text"] }}
-                        </span>
+                    {% else %}
 
-                    </label>
+                        <span></span>
 
-                {% endfor %}
-
-            </div>
+                    {% endif %}
 
 
-            <div class="quiz-navigation">
+                    {% if question_index + 1 < total_questions %}
 
-                {% if question_index > 0 %}
+                        <a
+                            href="{{ url_for(
+                                'question',
+                                section_id=section_id,
+                                question_index=question_index + 1
+                            ) }}"
+                        >
+                        <button
+                                type="submit"
+                                class="next-button">
+                                Next →
+                        </button>
+                        </a>
 
-                    <a
-                        href="{{ url_for(
-                            'question',
-                            section_id=section_id,
-                            question_index=question_index - 1
-                        ) }}"
-                        class="previous-button"
-                    >
-                        ← Previous
-                    </a>
+                    {% endif %}
 
-                {% else %}
-
-                    <span></span>
-
-                {% endif %}
-
-
-                {% if question_index + 1 < total_questions %}
-
-                    <a
-                        href="{{ url_for(
-                            'question',
-                            section_id=section_id,
-                            question_index=question_index + 1
-                        ) }}"
-                        class="next-button"
-                    >
-                        Next →
-                    </a>
-
-                {% endif %}
-
-            </div>
-
+                </div>
+            </form>
         </div>
 
     </div>

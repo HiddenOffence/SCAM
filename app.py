@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for, session
 from database import (
     create_tables,
     get_sections,
@@ -8,6 +8,7 @@ from database import (
 
 
 app = Flask(__name__)
+app.secret_key = "scam_your_study2026"
 
 
 @app.route("/")
@@ -48,7 +49,9 @@ def quiz_section(section_id):
     )
 
 
-@app.route("/quiz/<int:section_id>/question/<int:question_index>")
+@app.route(
+    "/quiz/<int:section_id>/question/<int:question_index>",
+    methods=["GET", "POST"])
 def question(section_id, question_index):
 
     questions = get_questions_by_section(section_id)
