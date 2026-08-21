@@ -1,48 +1,138 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-    <title>Study Method Discovery Quiz</title>
+{% block content %}
 
-    <link
-        rel="stylesheet"
-        href="/static/css/style.css"
-    >
-</head>
+<section class="quiz-intro-page">
 
-<body>
+    <div class="quiz-intro-card">
 
-    <div class="quiz-page">
-
-        <h1>Study Method Discovery Quiz 🧠</h1>
-
-        <p class="quiz-intro">
-            Choose a section to begin.
+        <p class="quiz-intro-label">
+            STUDY METHOD DISCOVERY QUIZ
         </p>
 
-        <div class="section-grid">
+        <h1>
+            Find Study Strategies That Work Better For You
+        </h1>
 
-            {% for section in sections %}
+        <p class="quiz-intro-text">
+            This quiz explores your current study habits, preferences
+            and focus patterns to suggest strategies you may want to try.
+        </p>
 
-                <a
-                    href="{{ url_for('quiz_section', section_id=section['id']) }}"
-                    class="section-card"
-                >
 
-                    <h2>{{ section["name"] }}</h2>
+        <div class="quiz-info-grid">
 
-                    <p>{{ section["description"] }}</p>
+            <div class="quiz-info-item">
 
-                    <span>Start section →</span>
+                <div class="quiz-info-icon">
+                    30
+                </div>
 
-                </a>
+                <h3>30 Short Questions</h3>
 
-            {% endfor %}
+                <p>
+                    Answer honestly based on how you usually study.
+                </p>
+
+            </div>
+
+
+            <div class="quiz-info-item">
+
+                <div class="quiz-info-icon">
+                    ✓
+                </div>
+
+                <h3>No Right or Wrong Answers</h3>
+
+                <p>
+                    Choose the option that feels most like you.
+                </p>
+
+            </div>
+
+
+            <div class="quiz-info-item">
+
+                <div class="quiz-info-icon">
+                    ★
+                </div>
+
+                <h3>Personalised Suggestions</h3>
+
+                <p>
+                    Your responses are used to recommend study strategies
+                    you can experiment with.
+                </p>
+
+            </div>
 
         </div>
 
+
+        <div class="quiz-how-to">
+
+            <h2>How to Take the Quiz</h2>
+
+            <div class="quiz-steps">
+
+                <div class="quiz-step">
+                    <span>1</span>
+
+                    <p>
+                        Read each question carefully.
+                    </p>
+                </div>
+
+                <div class="quiz-step">
+                    <span>2</span>
+
+                    <p>
+                        Select the answer that best reflects your usual habits.
+                    </p>
+                </div>
+
+                <div class="quiz-step">
+                    <span>3</span>
+
+                    <p>
+                        Use Next and Previous if you want to change an answer.
+                    </p>
+                </div>
+
+                <div class="quiz-step">
+                    <span>4</span>
+
+                    <p>
+                        Complete the quiz to receive your study recommendations.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="quiz-intro-note">
+
+            <strong>Important:</strong>
+
+            This quiz does not diagnose a fixed learning style.
+            It is designed to help you reflect on your habits and explore
+            practical study strategies.
+
+        </div>
+
+
+        <a
+            href="{{ url_for('quiz_section', section_id=1) }}"
+            class="start-quiz-button"
+        >
+            Start Quiz →
+        </a>
+
     </div>
 
-</body>
+</section>
 
-</html>
+{% endblock %}

@@ -1,141 +1,131 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
+{% block content %}
 
-    <title>Study Method Discovery Quiz</title>
+<div class="question-page">
 
-    <link
-        rel="stylesheet"
-        href="/static/css/style.css"
-    >
+    <div class="quiz-header">
 
-</head>
-
-<body>
-
-    <div class="question-page">
-
-        <div class="quiz-header">
-
-            <div>
-                Question {{ question_index + 1 }} of {{ total_questions }}
-            </div>
-
-            <div>
-                {{ ((question_index + 1) / total_questions * 100)|round|int }}%
-            </div>
-
+        <div>
+            Question {{ question_index + 1 }} of {{ total_questions }}
         </div>
 
-
-        <div class="progress-bar">
-
-            <div
-                class="progress"
-                style="width: {{ ((question_index + 1) / total_questions * 100) }}%;"
-            >
-            </div>
-
-        </div>
-
-
-        <p class="quiz-section-title">
-            Section {{ section_id }} of 6 · {{ section["name"] }}
-        </p>
-
-
-        <div class="question-card">
-            <form method="POST">
-
-                <h1>
-                    {{ question["question_text"] }}
-                </h1>
-
-
-                <div class="answer-options">
-
-                    {% for answer in answers %}
-
-                        <label class="answer-option">
-
-                            <input
-                                type="radio"
-                                name="answer"
-                                value="{{ answer['id'] }}"
-                                {% if selected_answer == answer["id"] %}
-                                    checked
-                                {% endif %}
-                                required
-                            >
-
-                            <span>
-                                {{ answer["text"] }}
-                            </span>
-
-                        </label>
-
-                    {% endfor %}
-
-                </div>
-
-
-                <div class="quiz-navigation">
-
-                    {% if question_index > 0 %}
-
-                        <a
-                            href="{{ url_for(
-                                'question',
-                                section_id=section_id,
-                                question_index=question_index - 1
-                            ) }}"
-                            class="previous-button"
-                        >
-                            ← Previous
-                        </a>
-
-                    {% else %}
-
-                        <span></span>
-
-                    {% endif %}
-
-
-                    {% if question_index + 1 < total_questions %}
-
-                        <button
-                            type="submit"
-                            class="next-button"
-                        >
-                            Next →
-                        </button>
-
-                    {% elif section_id < 6 %}
-
-                        <button
-                            type="submit"
-                            class="next-button"
-                        >
-                            Continue →
-                        </button>
-
-                    {% else %}
-
-                        <button
-                            type="submit"
-                            class="next-button"
-                        >
-                            See Results →
-                        </button>
-
-                    {% endif %}
-                </div>
-            </form>
+        <div>
+            {{ ((question_index + 1) / total_questions * 100)|round|int }}%
         </div>
 
     </div>
 
-</body>
 
-</html>
+    <div class="progress-bar">
+
+        <div
+            class="progress"
+            style="width: {{ ((question_index + 1) / total_questions * 100) }}%;"
+        >
+        </div>
+
+    </div>
+
+
+    <p class="quiz-section-title">
+        Section {{ section_id }} of 6 · {{ section["name"] }}
+    </p>
+
+
+    <div class="question-card">
+
+        <form method="POST">
+
+            <h1>
+                {{ question["question_text"] }}
+            </h1>
+
+
+            <div class="answer-options">
+
+                {% for answer in answers %}
+
+                    <label class="answer-option">
+
+                        <input
+                            type="radio"
+                            name="answer"
+                            value="{{ answer['id'] }}"
+                            {% if selected_answer == answer["id"] %}
+                                checked
+                            {% endif %}
+                            required
+                        >
+
+                        <span>
+                            {{ answer["text"] }}
+                        </span>
+
+                    </label>
+
+                {% endfor %}
+
+            </div>
+
+
+            <div class="quiz-navigation">
+
+                {% if question_index > 0 %}
+
+                    <a
+                        href="{{ url_for(
+                            'question',
+                            section_id=section_id,
+                            question_index=question_index - 1
+                        ) }}"
+                        class="previous-button"
+                    >
+                        ← Previous
+                    </a>
+
+                {% else %}
+
+                    <span></span>
+
+                {% endif %}
+
+
+                {% if question_index + 1 < total_questions %}
+
+                    <button
+                        type="submit"
+                        class="next-button"
+                    >
+                        Next →
+                    </button>
+
+                {% elif section_id < 6 %}
+
+                    <button
+                        type="submit"
+                        class="next-button"
+                    >
+                        Continue →
+                    </button>
+
+                {% else %}
+
+                    <button
+                        type="submit"
+                        class="next-button"
+                    >
+                        See Results →
+                    </button>
+
+                {% endif %}
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
