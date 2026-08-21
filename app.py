@@ -62,6 +62,25 @@ def question(section_id, question_index):
     current_question = questions[question_index]
 
     answers = get_answers_by_question(current_question["id"])
+    if request.method == "POST":
+        selected_answer = request.form.get("answer")
+        if selected_answer:
+            if "answers" not in session:
+                session["answers"] = {}
+            answers_dict = session["answers"]
+            answers_dict[str(current_question["id"])] = selected_answer
+            session["answers"] = answers_dict
+
+            if question_index + 1 < len(questions):
+                return redirect(
+                    url_for(
+                        "question",
+                        section_id=section_id,
+                        question_index=question_index + 1
+                    )
+                )
+            else:
+                return redirect(url_for("results"))
 
     return render_template(
         "question.html",

@@ -101,22 +101,32 @@
 
                     {% if question_index + 1 < total_questions %}
 
-                        <a
-                            href="{{ url_for(
-                                'question',
-                                section_id=section_id,
-                                question_index=question_index + 1
-                            ) }}"
-                        >
                         <button
-                                type="submit"
-                                class="next-button">
-                                Next →
+                            type="submit"
+                            class="next-button"
+                        >
+                            Next →
                         </button>
-                        </a>
+
+                    {% elif section_id < 6 %}
+
+                        <button
+                            type="submit"
+                            class="next-button"
+                        >
+                            Continue →
+                        </button>
+
+                    {% else %}
+
+                        <button
+                            type="submit"
+                            class="next-button"
+                        >
+                            See Results →
+                        </button>
 
                     {% endif %}
-
                 </div>
             </form>
         </div>
