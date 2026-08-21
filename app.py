@@ -72,24 +72,29 @@ def question(section_id, question_index):
             session["answers"] = answers_dict
 
             if question_index + 1 < len(questions):
+                # Move to the next question in this section
+                return redirect(url_for("question",
+                                        section_id=section_id,
+                                        question_index=question_index + 1))
+            elif section_id < 6:
+                # Show the introduction card for the next section
                 return redirect(
-                    url_for(
-                        "question",
-                        section_id=section_id,
-                        question_index=question_index + 1
-                    )
-                )
-            else:
-                return redirect(url_for("results"))
+                    url_for("quiz_section", section_id=section_id + 1))
 
-    return render_template(
-        "question.html",
-        question=current_question,
-        answers=answers,
-        section_id=section_id,
-        question_index=question_index,
-        total_questions=len(questions)
-    )
+            else:
+
+                # Finished Section 6 and therefore the whole quiz.
+                return redirect(
+                    url_for("results")
+                )
+
+        return render_template(
+                    "question.html",
+                    question=current_question,
+                    answers=answers,
+                    section_id=section_id,
+                    question_index=question_index,
+                    total_questions=len(questions))
 
 
 @app.route("/results")
