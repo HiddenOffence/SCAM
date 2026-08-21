@@ -360,64 +360,54 @@ body{
 
 .section-intro {
     min-height: 80vh;
-
     display: flex;
     justify-content: center;
     align-items: center;
-
     padding: 30px;
 }
 
 .section-intro-card {
     width: 600px;
     max-width: 90%;
-
     background: #b9d5f5;
-
     border-radius: 25px;
-
     padding: 50px;
-
     text-align: center;
-
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
 }
 
 .section-number {
     font-size: 16px;
     font-weight: bold;
+    color: #293dcc;
 }
 
 .section-intro-card h1 {
     font-size: 42px;
     margin: 15px 0;
+    color: #293dcc;
 }
 
 .section-description {
     font-size: 20px;
     line-height: 1.5;
+    color: white;
 }
 
 .question-count {
     margin: 25px 0;
     font-weight: bold;
+    color: #293dcc;
 }
 
 .continue-button {
     display: inline-block;
-
     padding: 15px 35px;
-
     background: white;
-
     border-radius: 30px;
-
     color: #293dcc;
-
     text-decoration: none;
-
     font-weight: bold;
-
     transition: 0.2s;
 }
 

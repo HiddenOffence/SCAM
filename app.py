@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-from database import (
+from database import ( 
     create_tables,
     get_sections,
     get_questions_by_section,
