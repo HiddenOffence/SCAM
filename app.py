@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-from database import ( 
+from database import (
     create_tables,
     get_sections,
     get_questions_by_section,
-    get_answers_by_question
+    get_answers_by_question,
+    calculate_quiz_results
 )
 
 
@@ -154,7 +155,28 @@ def question(section_id, question_index):
 
 @app.route("/results")
 def results():
-    return render_template("results.html")
+
+    # Get the answers saved while the user completed the quiz
+    quiz_answers = session.get("quiz_answers", {})
+
+    # If there are no answers, send the user back to the quiz
+    if not quiz_answers:
+        return redirect(url_for("quiz"))
+
+    # Get just the answer IDs
+    answer_ids = list(quiz_answers.values())
+
+    # Calculate the scores using the database
+    quiz_results = calculate_quiz_results(answer_ids)
+
+    # The first result has the highest score
+    top_result = quiz_results[0] if quiz_results else None
+
+    return render_template(
+        "results.html",
+        results=quiz_results,
+        top_result=top_result
+    )
 
 
 @app.route("/reviews")
