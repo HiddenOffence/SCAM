@@ -92,8 +92,8 @@ def create_tables():
 
     FOREIGN KEY (question_id)
         REFERENCES questions(id)
-)
-""")
+    )
+    """)
 
     # Study methods
     cursor.execute("""
@@ -139,35 +139,36 @@ def create_tables():
     conn.commit()
     conn.close()
 
-    def calculate_quiz_results(answer_ids):
-        conn = get_connection()
 
-        scores = conn.execute("""
-            SELECT
-                study_methods.id,
-                study_methods.name,
-                study_methods.description,
-                study_methods.tips,
-                study_methods.youtube_link,
-                study_methods.spotify_playlist,
-                study_methods.image,
-                SUM(answer_study_methods.points) AS score
+def calculate_quiz_results(answer_ids):
+    conn = get_connection()
 
-            FROM answer_study_methods
+    scores = conn.execute("""
+        SELECT
+            study_methods.id,
+            study_methods.name,
+            study_methods.description,
+            study_methods.tips,
+            study_methods.youtube_link,
+            study_methods.spotify_playlist,
+            study_methods.image,
+            SUM(answer_study_methods.points) AS score
 
-            JOIN study_methods
-                ON answer_study_methods.method_id = study_methods.id
+        FROM answer_study_methods
 
-            WHERE answer_study_methods.answer_id
-                IN ({placeholders})
+        JOIN study_methods
+            ON answer_study_methods.method_id = study_methods.id
 
-            GROUP BY study_methods.id
+        WHERE answer_study_methods.answer_id
+            IN ({placeholders})
 
-            ORDER BY score DESC
-        """.format(
-            placeholders=",".join("?" * len(answer_ids))
-        ), answer_ids).fetchall()
+        GROUP BY study_methods.id
 
-        conn.close()
+        ORDER BY score DESC
+    """.format(
+        placeholders=",".join("?" * len(answer_ids))
+    ), answer_ids).fetchall()
 
-        return scores
+    conn.close()
+
+    return scores
