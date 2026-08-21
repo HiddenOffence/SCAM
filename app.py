@@ -23,8 +23,16 @@ def about():
 
 @app.route("/quiz")
 def quiz():
+
+    # To start a new quiz: it clears any answers from a previous attempt
+    session.pop("quiz_answers", None)
+
     sections = get_sections()
-    return render_template("quiz.html", sections=sections)
+
+    return render_template(
+        "quiz.html",
+        sections=sections
+    )
 
 
 @app.route("/quiz/<int:section_id>")
