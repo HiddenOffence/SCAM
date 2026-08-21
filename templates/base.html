@@ -22,32 +22,34 @@
 
 <body>
 
-<header>
+{% if not hide_nav %}
+    <header>
 
-    <nav class="navbar">
+        <nav class="navbar">
 
-        <a class="logo"
-        href="/">
+            <a class="logo"
+            href="/">
 
-            S.C.A.M Don't CRAM
+                S.C.A.M Don't CRAM
 
-        </a>
+            </a>
 
-        <ul>
+            <ul>
 
-            <li><a href="/">Home</a></li>
+                <li><a href="/">Home</a></li>
 
-            <li><a href="/about">About</a></li>
+                <li><a href="/about">About</a></li>
 
-            <li><a href="/quiz">Quiz</a></li>
+                <li><a href="/quiz">Quiz</a></li>
 
-            <li><a href="/reviews">Reviews</a></li>
+                <li><a href="/reviews">Reviews</a></li>
 
-        </ul>
+            </ul>
 
-    </nav>
+        </nav>
 
-</header>
+    </header>
+{% endif %}
 
 
 <main>
@@ -58,20 +60,22 @@
 
 </main>
 
-<footer class="footer">
+{% if not hide_nav %}
+    <footer class="footer">
 
-    <h3>SCAM Don't CRAM</h3>
+        <h3>SCAM Don't CRAM</h3>
 
-    <p>
-        Helping students discover
-        evidence-based study strategies.
-    </p>
+        <p>
+            Helping students discover
+            evidence-based study strategies.
+        </p>
 
-    <p>
-        © 2026 SCAM Don't CRAM
-    </p>
+        <p>
+            © 2026 SCAM Don't CRAM
+        </p>
 
-</footer>
+    </footer>
+{% endif %}
 
 </body>
 

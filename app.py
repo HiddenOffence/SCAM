@@ -104,7 +104,8 @@ def question(section_id, question_index):
                 section_id=section_id,
                 question_index=question_index,
                 total_questions=len(questions),
-                selected_answer=selected_answer)
+                selected_answer=selected_answer,
+                hide_nav=True)
 
         # Saves this answer in the session
         quiz_answers = session["quiz_answers"]
@@ -147,7 +148,8 @@ def question(section_id, question_index):
         section_id=section_id,
         question_index=question_index,
         total_questions=len(questions),
-        selected_answer=selected_answer)
+        selected_answer=selected_answer,
+        hide_nav=True)
 
 
 @app.route("/results")
