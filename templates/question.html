@@ -41,7 +41,7 @@
 
 
         <p class="quiz-section-title">
-            Study Method Discovery
+            Section {{ section_id }} of 6 · {{ section["name"] }}
         </p>
 
 
@@ -63,6 +63,9 @@
                                 type="radio"
                                 name="answer"
                                 value="{{ answer['id'] }}"
+                                {% if selected_answer == answer["id"] %}
+                                    checked
+                                {% endif %}
                                 required
                             >
 
