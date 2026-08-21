@@ -787,3 +787,42 @@ body{
 .results-note p {
     line-height: 1.7;
 }
+
+@media print {
+
+    body {
+        background: white;
+        color: black;
+    }
+
+    header,
+    .footer,
+    .results-actions,
+    .resource-buttons {
+        display: none;
+    }
+
+    .results-page {
+        max-width: 100%;
+        padding: 20px;
+    }
+
+    .results-heading {
+        color: var(--dark-blue);
+    }
+
+    .top-result-card,
+    .result-card {
+        box-shadow: none;
+        border: 1px solid #cccccc;
+    }
+
+    .result-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .results-note {
+        color: var(--dark-blue);
+        border: 1px solid #cccccc;
+    }
+}
