@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import datetime
 
 DATABASE = "database/quiz.db"
 
@@ -172,3 +173,40 @@ def calculate_quiz_results(answer_ids):
     conn.close()
 
     return scores
+
+
+# Code by Chatgpt:
+def get_reviews():
+
+    conn = get_connection()
+
+    reviews = conn.execute("""
+        SELECT id, name, rating, comment, date_posted
+        FROM reviews
+        ORDER BY id DESC
+    """).fetchall()
+
+    conn.close()
+
+    return reviews
+
+
+def add_review(name, rating, comment):
+
+    conn = get_connection()
+
+    date_posted = datetime.now().strftime("%d %B %Y")
+
+    conn.execute("""
+        INSERT INTO reviews
+        (name, rating, comment, date_posted)
+        VALUES (?, ?, ?, ?)
+    """, (
+        name,
+        rating,
+        comment,
+        date_posted
+    ))
+
+    conn.commit()
+    conn.close()

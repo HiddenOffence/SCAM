@@ -4,7 +4,9 @@ from database import (
     get_sections,
     get_questions_by_section,
     get_answers_by_question,
-    calculate_quiz_results
+    calculate_quiz_results,
+    get_reviews,
+    add_review
 )
 
 
@@ -179,9 +181,38 @@ def results():
     )
 
 
-@app.route("/reviews")
+@app.route("/reviews", methods=["GET", "POST"])
 def reviews():
-    return render_template("reviews.html")
+
+    if request.method == "POST":
+
+        name = request.form.get("name", "").strip()
+        rating = request.form.get("rating")
+        comment = request.form.get("comment", "").strip()
+
+        if name and rating and comment:
+
+            rating = int(rating)
+
+            # Only accept ratings from 1 to 5
+            if 1 <= rating <= 5:
+
+                add_review(
+                    name,
+                    rating,
+                    comment
+                )
+
+                return redirect(
+                    url_for("reviews")
+                )
+
+    all_reviews = get_reviews()
+
+    return render_template(
+        "reviews.html",
+        reviews=all_reviews
+    )
 
 
 if __name__ == "__main__":

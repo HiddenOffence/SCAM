@@ -2,12 +2,162 @@
 
 {% block content %}
 
-<h1>Student Reviews</h1>
+<section class="reviews-page">
 
-<p>
+    <div class="reviews-heading">
 
-Read what other students thought about the quiz.
+        <h1>Student Reviews</h1>
 
-</p>
+        <p>
+            See what students thought about SCAM Don't CRAM,
+            or share your own experience.
+        </p>
+
+    </div>
+
+
+    <div class="review-layout">
+
+        <div class="review-form-card">
+
+            <h2>Leave a Review</h2>
+
+            <form method="POST">
+
+                <label for="name">
+                    Name
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    maxlength="50"
+                    required
+                >
+
+
+                <label for="rating">
+                    Rating
+                </label>
+
+                <select
+                    id="rating"
+                    name="rating"
+                    required
+                >
+
+                    <option value="">
+                        Select a rating
+                    </option>
+
+                    <option value="5">
+                        ★★★★★ - 5
+                    </option>
+
+                    <option value="4">
+                        ★★★★☆ - 4
+                    </option>
+
+                    <option value="3">
+                        ★★★☆☆ - 3
+                    </option>
+
+                    <option value="2">
+                        ★★☆☆☆ - 2
+                    </option>
+
+                    <option value="1">
+                        ★☆☆☆☆ - 1
+                    </option>
+
+                </select>
+
+
+                <label for="comment">
+                    Your Review
+                </label>
+
+                <textarea
+                    id="comment"
+                    name="comment"
+                    rows="5"
+                    maxlength="500"
+                    required
+                ></textarea>
+
+
+                <button
+                    type="submit"
+                    class="review-submit-button"
+                >
+                    Submit Review
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <div class="reviews-list">
+
+            <h2>What Students Say</h2>
+
+            {% if reviews %}
+
+                {% for review in reviews %}
+
+                    <div class="review-card">
+
+                        <div class="review-top">
+
+                            <h3>
+                                {{ review["name"] }}
+                            </h3>
+
+                            <span class="review-rating">
+
+                                {% for star in range(review["rating"]) %}
+                                    ★
+                                {% endfor %}
+
+                                {% for star in range(5 - review["rating"]) %}
+                                    ☆
+                                {% endfor %}
+
+                            </span>
+
+                        </div>
+
+                        <p class="review-comment">
+                            "{{ review["comment"] }}"
+                        </p>
+
+                        <p class="review-date">
+                            {{ review["date_posted"] }}
+                        </p>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="review-card">
+
+                    <p>
+                        No reviews yet. Be the first student
+                        to share your experience!
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
 
 {% endblock %}
