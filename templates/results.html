@@ -2,12 +2,195 @@
 
 {% block content %}
 
-<h1>Your Results</h1>
+<section class="results-page">
 
-<p>
+    <div class="results-heading">
 
-Results will appear here.
+        <p class="results-label">QUIZ COMPLETE</p>
 
-</p>
+        <h1>Your Study Recommendations</h1>
+
+        <p>
+            Based on your answers, these study strategies
+            may be useful for you to try.
+        </p>
+
+    </div>
+
+
+    {% if top_result %}
+
+        <div class="top-result-card">
+
+            <p class="result-badge">
+                TOP RECOMMENDATION
+            </p>
+
+            <h2>
+                {{ top_result["name"] }}
+            </h2>
+
+            <p class="result-description">
+                {{ top_result["description"] }}
+            </p>
+
+            {% if top_result["tips"] %}
+
+                <div class="result-tips">
+
+                    <h3>How to try it</h3>
+
+                    <p>
+                        {{ top_result["tips"] }}
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="all-results">
+
+            <h2>Your Study Strategy Scores</h2>
+
+            <p>
+                A higher score means your quiz answers matched
+                more strongly with that strategy.
+            </p>
+
+
+            <div class="result-grid">
+
+                {% for result in results %}
+
+                    <div class="result-card">
+
+                        <div class="result-card-heading">
+
+                            <h3>
+                                {{ result["name"] }}
+                            </h3>
+
+                            <span class="score">
+                                {{ result["score"] }} pts
+                            </span>
+
+                        </div>
+
+
+                        <p>
+                            {{ result["description"] }}
+                        </p>
+
+
+                        {% if result["tips"] %}
+
+                            <div class="method-tips">
+
+                                <strong>Try this:</strong>
+
+                                {{ result["tips"] }}
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <div class="resource-buttons">
+
+                            {% if result["youtube_link"] %}
+
+                                <a
+                                    href="{{ result['youtube_link'] }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="resource-button"
+                                >
+                                    Watch Resource
+                                </a>
+
+                            {% endif %}
+
+
+                            {% if result["spotify_playlist"] %}
+
+                                <a
+                                    href="{{ result['spotify_playlist'] }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="resource-button"
+                                >
+                                    Study Playlist
+                                </a>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <div class="results-actions">
+
+            <button
+                onclick="window.print()"
+                class="save-pdf-button"
+            >
+                Save Results as PDF
+            </button>
+
+            <a
+                href="/templates/quiz.html"
+                class="retake-button"
+            >
+                Retake Quiz
+            </a>
+
+        </div>
+
+
+        <div class="results-note">
+
+            <h3>Remember</h3>
+
+            <p>
+                These results are recommendations, not fixed labels.
+                Different subjects and tasks may work better with
+                different study strategies. Try the suggested methods
+                and keep the ones that genuinely help you learn.
+            </p>
+
+        </div>
+
+    {% else %}
+
+        <div class="top-result-card">
+
+            <h2>No result could be calculated</h2>
+
+            <p>
+                Please complete the quiz before viewing your results.
+            </p>
+
+            <a
+                href="{{ url_for('quiz') }}"
+                class="retake-button"
+            >
+                Start Quiz
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</section>
 
 {% endblock %}
