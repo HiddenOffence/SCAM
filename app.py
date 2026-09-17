@@ -8,10 +8,13 @@ from database import (
     get_reviews,
     add_review
 )
+from dotenv import load_dotenv
+import os
+load_dotenv(override=True)
 
 
 app = Flask(__name__)
-app.secret_key = "scam_your_study2026"
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 
 
 @app.route("/")
