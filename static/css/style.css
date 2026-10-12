@@ -1281,3 +1281,18 @@ body{
     background: #1F2D6B;
     transform: translateY(-3px);
 }
+
+/* Review form validation messages */
+
+.form-error {
+    color: #B42318;
+    background: #FFF0ED;
+    border-left: 4px solid #B42318;
+
+    padding: 10px 12px;
+    margin: 8px 0 15px;
+
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+}

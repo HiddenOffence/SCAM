@@ -1,3 +1,4 @@
+'''SCAM Don't CRAM 2026'''
 from flask import Flask, render_template, request, redirect, url_for, session
 from database import (
     create_tables,
@@ -8,6 +9,7 @@ from database import (
     get_reviews,
     add_review
 )
+from forms import ReviewForm
 
 
 app = Flask(__name__)
@@ -189,35 +191,50 @@ def results():
 
 @app.route("/reviews", methods=["GET", "POST"])
 def reviews():
+    """Display student reviews and validate new submissions."""
 
-    if request.method == "POST":
+    # Create the form, including its CSRF token.
+    form = ReviewForm()
 
-        name = request.form.get("name", "").strip()
-        rating = request.form.get("rating")
-        comment = request.form.get("comment", "").strip()
+    if form.validate_on_submit():
 
-        if name and rating and comment:
+        name = form.name.data.strip()
+        comment = form.comment.data.strip()
 
-            rating = int(rating)
-
-            # Only accept ratings from 1 to 5
-            if 1 <= rating <= 5:
-
-                add_review(
-                    name,
-                    rating,
-                    comment
+        # Convert the validated rating safely to an integer.
+        try:
+            rating = int(form.rating.data)
+        except (TypeError, ValueError):
+            form.rating.errors.append(
+                "Please select a valid rating."
+            )
+        else:
+            # Validate values again after removing whitespace.
+            if not name:
+                form.name.errors.append(
+                    "Please enter your name."
                 )
-
-                return redirect(
-                    url_for("reviews")
+            elif not comment:
+                form.comment.errors.append(
+                    "Please enter your review."
                 )
+            elif not 1 <= rating <= 5:
+                form.rating.errors.append(
+                    "Rating must be between 1 and 5."
+                )
+            else:
+                # Store only validated reviews in SQLite.
+                add_review(name, rating, comment)
 
+                return redirect(url_for("reviews"))
+
+    # Retrieve existing reviews for both GET and invalid POST.
     all_reviews = get_reviews()
 
     return render_template(
         "reviews.html",
-        reviews=all_reviews
+        reviews=all_reviews,
+        form=form,
     )
 
 

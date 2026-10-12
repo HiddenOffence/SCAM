@@ -1,16 +1,16 @@
-"""Forms and input validation for SCAM Don't CRAM."""
+"""Form validation for the SCAM Don't CRAM website."""
 
 from flask_wtf import FlaskForm
-from wtforms import IntegerField, StringField, TextAreaField
-from wtforms.validators import (
-    DataRequired,
-    Length,
-    NumberRange,
+from wtforms import (
+    SelectField,
+    StringField,
+    TextAreaField,
 )
+from wtforms.validators import DataRequired, Length
 
 
 class ReviewForm(FlaskForm):
-    """Validate student reviews before storing them."""
+    """Validate review inputs and provide CSRF protection."""
 
     name = StringField(
         "Name",
@@ -20,16 +20,20 @@ class ReviewForm(FlaskForm):
         ],
     )
 
-    rating = IntegerField(
+    rating = SelectField(
         "Rating",
-        validators=[
-            DataRequired(),
-            NumberRange(min=1, max=5),
+        choices=[
+            ("5", "★★★★★ - 5"),
+            ("4", "★★★★☆ - 4"),
+            ("3", "★★★☆☆ - 3"),
+            ("2", "★★☆☆☆ - 2"),
+            ("1", "★☆☆☆☆ - 1"),
         ],
+        validators=[DataRequired()],
     )
 
     comment = TextAreaField(
-        "Review",
+        "Your Review",
         validators=[
             DataRequired(),
             Length(min=5, max=500),
