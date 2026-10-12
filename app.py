@@ -8,13 +8,10 @@ from database import (
     get_reviews,
     add_review
 )
-from dotenv import load_dotenv
-import os
-load_dotenv(override=True)
 
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+app.secret_key = "scam_your_study2026"
 
 
 @app.route("/")
@@ -222,6 +219,16 @@ def reviews():
         "reviews.html",
         reviews=all_reviews
     )
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    """Display a custom 404 page without the navigation bar."""
+
+    return render_template(
+        "404.html",
+        hide_nav=True
+    ), 404
 
 
 if __name__ == "__main__":
