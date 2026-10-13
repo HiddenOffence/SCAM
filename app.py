@@ -283,6 +283,24 @@ def page_not_found(error):
     ), 404
 
 
+@app.errorhandler(500)
+def internal_server_error(error):
+    """Display a friendly page for unexpected server errors."""
+    return render_template(
+        "500.html",
+        hide_nav=True
+    ), 500
+
+
+@app.errorhandler(505)
+def http_version_not_supported(error):
+    """Display a page for unsupported HTTP versions."""
+    return render_template(
+        "505.html",
+        hide_nav=True
+    ), 505
+
+
 if __name__ == "__main__":
 
     create_tables()
