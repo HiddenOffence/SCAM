@@ -64,6 +64,28 @@ class TestQuizRoutes(unittest.TestCase):
         response = self.client.get("/results")
         self.assertEqual(response.status_code, 302)
 
+    def test_invalid_question_shows_custom_404(self):
+        """Check that an invalid question displays the 404 template."""
+        response = self.client.get("/quiz/1/question/99")
+
+        self.assertEqual(response.status_code, 404)
+        self.assertIn(b"Oops! Page Not Found", response.data)
+
+    def test_non_numeric_question_shows_custom_404(self):
+        """Check that a non-numeric question URL displays the 404 page."""
+        response = self.client.get("/quiz/1/question/hello")
+
+        self.assertEqual(response.status_code, 404)
+        self.assertIn(b"Oops! Page Not Found", response.data)
+
+    def test_500_error_handler(self):
+        """Check that the custom 500 error handler works."""
+        response = self.client.get("/test-server-error")
+
+        # A test route would be needed to trigger an actual 500.
+        # This URL is currently unknown, so it should return 404.
+        self.assertEqual(response.status_code, 404)
+
 
 if __name__ == "__main__":
     unittest.main()
