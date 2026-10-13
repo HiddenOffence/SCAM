@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="error-page">
+    <div class="error-card">
+
+        <div class="error-icon">🌐</div>
+
+        <h1>505</h1>
+        <h2>HTTP Version Not Supported</h2>
+
+        <p>
+            Oops! Your browser is using an HTTP version
+            that this server cannot support.
+            Try updating your browser or trying again later.
+        </p>
+
+        <a href="{{ url_for('home') }}"
+           class="error-home-button">
+            ← Back to Home
+        </a>
+
+    </div>
+</section>
+
+{% endblock %}
