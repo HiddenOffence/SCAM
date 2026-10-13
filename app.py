@@ -1,5 +1,8 @@
 '''SCAM Don't CRAM 2026'''
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import (
+    Flask, render_template, request,
+    redirect, url_for, session, abort
+)
 from database import (
     create_tables,
     get_sections,
@@ -70,9 +73,9 @@ def question(section_id, question_index):
     # Getting the 5 questions that belong to this section
     questions = get_questions_by_section(section_id)
 
-    # Stops from creating invalid question numbers
+        # Show the custom 404 page for invalid question numbers.
     if question_index < 0 or question_index >= len(questions):
-        return "Question not found", 404
+        abort(404)
 
     # Getting the current question
     current_question = questions[question_index]
