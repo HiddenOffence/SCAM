@@ -7,7 +7,8 @@ from database import (
     get_answers_by_question,
     calculate_quiz_results,
     get_reviews,
-    add_review
+    add_review,
+    get_valid_quiz_answers
 )
 from forms import ReviewForm
 
@@ -48,6 +49,10 @@ def quiz_section(section_id):
         if item["id"] == section_id:
             section = item
             break
+
+    # Prevent invalid section IDs from reaching the template.
+    if section is None or not questions:
+        return render_template("404.html", hide_nav=True), 404
 
     return render_template(
         "quiz_section.html",
@@ -93,32 +98,30 @@ def question(section_id, question_index):
     # Check whether this question was answered before
     selected_answer = session["quiz_answers"].get(str(current_question["id"]))
 
-    # Runs when the user presses Next or Continue
+    # Process the answer when Next or Continue is clicked.
     if request.method == "POST":
-        selected_answer = request.form.get("answer")
+        submitted_answer = request.form.get("answer")
 
-        if selected_answer is None:
-            return render_template(
-                "question.html",
-                question=current_question,
-                answers=answer_options,
-                section=current_section,
-                section_id=section_id,
-                question_index=question_index,
-                total_questions=len(questions),
-                selected_answer=selected_answer,
-                hide_nav=True)
+        # Reject missing or non-numeric answer IDs.
+        try:
+            answer_id = int(submitted_answer)
+        except (TypeError, ValueError):
+            return "Please select a valid answer.", 400
 
-        # Saves this answer in the session
+        # Only accept answers belonging to this question.
+        valid_answer_ids = {
+            answer["id"] for answer in answer_options
+        }
+
+        if answer_id not in valid_answer_ids:
+            return "Invalid answer for this question.", 400
+
+        # Save the validated answer for this quiz attempt.
         quiz_answers = session["quiz_answers"]
-
-        quiz_answers[
-            str(current_question["id"])
-        ] = int(selected_answer)
-
+        quiz_answers[str(current_question["id"])] = answer_id
         session["quiz_answers"] = quiz_answers
-        # Questions 1-4:
-        # Moving to the next question
+
+        # Continue to the next question in this section.
         if question_index + 1 < len(questions):
             return redirect(
                 url_for(
@@ -127,21 +130,25 @@ def question(section_id, question_index):
                     question_index=question_index + 1
                 )
             )
-        # Question 5 in Sections 1-5:
-        # Shows the NEXT section introduction card
-        if section_id < 6:
 
+        # After question five, introduce the next section.
+        sections = get_sections()
+        section_ids = [item["id"] for item in sections]
+
+        current_position = section_ids.index(section_id)
+
+        if current_position + 1 < len(section_ids):
             return redirect(
                 url_for(
                     "quiz_section",
-                    section_id=section_id + 1
+                    section_id=section_ids[current_position + 1]
                 )
             )
-        # Quiz finishes
-        return redirect(
-            url_for("results")
-        )
 
+        # The last section leads to the results page.
+        return redirect(url_for("results"))
+
+    # Display the question page for GET requests.
     return render_template(
         "question.html",
         question=current_question,
@@ -151,31 +158,56 @@ def question(section_id, question_index):
         question_index=question_index,
         total_questions=len(questions),
         selected_answer=selected_answer,
-        hide_nav=True)
+        hide_nav=True
+    )
 
 
 @app.route("/results")
 def results():
+    """Calculate recommendations from validated quiz answers."""
 
-    # Get the answers saved while the user completed the quiz
+    # Retrieve answers stored during the current attempt.
     quiz_answers = session.get("quiz_answers", {})
 
-    # If there are no answers, send the user back to the quiz
-    if not quiz_answers:
+    if not isinstance(quiz_answers, dict) or not quiz_answers:
         return redirect(url_for("quiz"))
 
-    # Get just the answer IDs
-    answer_ids = list(quiz_answers.values())
+    # Retrieve valid question-answer relationships from SQLite.
+    valid_answers = get_valid_quiz_answers()
 
-    # Calculate the scores using the database
+    # Require one answer for every question in the database.
+    if len(quiz_answers) != len(valid_answers):
+        return redirect(url_for("quiz"))
+
+    answer_ids = []
+
+    for question_id, selected_answer in quiz_answers.items():
+
+        # Reject invalid question IDs or answer values.
+        try:
+            question_id = int(question_id)
+            answer_id = int(selected_answer)
+        except (TypeError, ValueError, OverflowError):
+            return redirect(url_for("quiz"))
+
+        # Confirm the answer belongs to the correct question.
+        if (
+            question_id not in valid_answers
+            or answer_id not in valid_answers[question_id]
+        ):
+            return redirect(url_for("quiz"))
+
+        answer_ids.append(answer_id)
+
+    # Score only answers that passed server-side validation.
     quiz_results = calculate_quiz_results(answer_ids)
 
-    # The first result has the highest score
-    # Find all methods tied for the highest score
+    # Identify all strategies tied for the highest score.
     top_results = []
 
     if quiz_results:
         highest_score = quiz_results[0]["score"]
+
         top_results = [
             result
             for result in quiz_results

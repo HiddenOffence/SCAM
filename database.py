@@ -43,6 +43,37 @@ def get_questions_by_section(section_id):
     return questions
 
 
+
+def get_valid_quiz_answers():
+    """Return valid answer IDs grouped by their question IDs."""
+
+    conn = get_connection()
+
+    rows = conn.execute("""
+        SELECT
+            questions.id AS question_id,
+            answers.id AS answer_id
+        FROM questions
+        JOIN answers
+            ON answers.question_id = questions.id
+    """).fetchall()
+
+    conn.close()
+
+    valid_answers = {}
+
+    for row in rows:
+        question_id = row["question_id"]
+        answer_id = row["answer_id"]
+
+        if question_id not in valid_answers:
+            valid_answers[question_id] = set()
+
+        valid_answers[question_id].add(answer_id)
+
+    return valid_answers
+
+
 def get_answers_by_question(question_id):
     conn = get_connection()
 
@@ -142,6 +173,12 @@ def create_tables():
 
 
 def calculate_quiz_results(answer_ids):
+    """Calculate study-method scores using selected answer IDs."""
+
+    # Avoid executing a scoring query without selected answers.
+    if not answer_ids:
+        return []
+
     conn = get_connection()
 
     scores = conn.execute("""
