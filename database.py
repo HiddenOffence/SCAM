@@ -220,7 +220,7 @@ def get_reviews():
     reviews = conn.execute("""
         SELECT id, name, rating, comment, date_posted
         FROM reviews
-        ORDER BY id DESC
+        ORDER BY id ASC LIMIT 5;
     """).fetchall()
 
     conn.close()

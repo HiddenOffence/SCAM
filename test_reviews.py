@@ -1,4 +1,3 @@
-
 """Security test for the student review form."""
 
 from app import app
